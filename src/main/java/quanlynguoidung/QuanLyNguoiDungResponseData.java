@@ -3,7 +3,8 @@ package quanlynguoidung;
 import java.util.Date;
 import java.util.List;
 
-import quanlynguoidung.list.UserInfoData;
+
+import repository.DTO.UserDTO;
 
 /**
  * Response Data chung cho tất cả use case
@@ -14,10 +15,10 @@ public class QuanLyNguoiDungResponseData {
     public Date timestamp;
     
     // Data cho "get" action
-    public UserInfoData user;
+    public UserDTO user;
     
     // Data cho "list" action
-    public List<UserInfoData> users;
+    public List<UserDTO> users;
     public int totalCount;
     public int filteredCount;
 }

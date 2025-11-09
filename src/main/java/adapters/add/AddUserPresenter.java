@@ -5,8 +5,7 @@ import java.util.Date;
 
 import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
 import quanlynguoidung.QuanLyNguoiDungResponseData;
-import quanlynguoidung.them.AddUserOutput;
-import quanlynguoidung.them.AddUserOutputBoundary;
+
 import quanlynguoidung.them.ResponseDataAddUser;
 
 public class AddUserPresenter implements QuanLyNguoiDungOutputBoundary {

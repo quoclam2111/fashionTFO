@@ -1,8 +1,7 @@
 package adapters.add;
 
 import quanlynguoidung.QuanLyNguoiDungRequestData;
-import quanlynguoidung.them.AddUserInputBoundary;
-import quanlynguoidung.them.AddUserInputData;
+
 import quanlynguoidung.them.AddUserUseCase;
 
 public class AddUserController {

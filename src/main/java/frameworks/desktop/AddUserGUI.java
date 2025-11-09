@@ -9,8 +9,7 @@ import adapters.add.AddUserViewModel;
 
 import java.awt.*;
 
-import quanlynguoidung.them.AddUserInputData;
-import quanlynguoidung.them.AddUserOutputBoundary;
+
 import quanlynguoidung.them.AddUserUseCase;
 import repository.jdbc.UserRepoImpl;
 
