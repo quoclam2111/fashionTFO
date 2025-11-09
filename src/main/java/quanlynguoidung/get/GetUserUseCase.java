@@ -2,94 +2,67 @@ package quanlynguoidung.get;
 
 import java.util.Optional;
 
-import quanlynguoidung.list.UserInfoData;
+import quanlynguoidung.QuanLyNguoiDungControl;
+import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
+import quanlynguoidung.QuanLyNguoiDungRequestData;
+import quanlynguoidung.QuanLyNguoiDungResponseData;
 import repository.GetUserRepositoryGateway;
 import repository.DTO.UserDTO;
 
-public class GetUserUseCase implements GetUserInputBoundary {
+public class GetUserUseCase extends QuanLyNguoiDungControl {
     private final GetUserRepositoryGateway repository;
-    private final GetUserOutputBoundary presenter;
     
-    public GetUserUseCase(GetUserRepositoryGateway repository, GetUserOutputBoundary presenter) {
+    public GetUserUseCase(GetUserRepositoryGateway repository, 
+                          QuanLyNguoiDungOutputBoundary presenter) {
+        super(presenter);
         this.repository = repository;
-        this.presenter = presenter;
+        this.response = new ResponseDataGetUser();
     }
     
     @Override
-    public void execute(GetUserInputData input) {
-        GetUserOutputData output = new GetUserOutputData();
-        
+    public void execute(QuanLyNguoiDungRequestData request) {
         try {
-            // 1. Validate input
-            if (input.searchValue == null || input.searchValue.trim().isEmpty()) {
-                output.success = false;
-                output.message = "SEARCH_VALUE_EMPTY";
-                presenter.present(output);
+            if (request.searchBy == null || request.searchValue == null || request.searchValue.isBlank()) {
+                response.success = false;
+                response.message = "Thiếu tiêu chí hoặc giá trị tìm kiếm!";
                 return;
             }
-            
-            if (!isValidSearchType(input.searchBy)) {
-                output.success = false;
-                output.message = "INVALID_SEARCH_TYPE";
-                presenter.present(output);
-                return;
+
+            // 🔍 Gọi repository tìm user
+            Optional<UserDTO> userOpt = switch (request.searchBy.toLowerCase()) {
+                case "id" -> repository.findById(request.searchValue);
+                case "username" -> repository.findByUsername(request.searchValue);
+                case "email" -> repository.findByEmail(request.searchValue);
+                case "phone" -> repository.findByPhone(request.searchValue);
+                default -> throw new IllegalArgumentException("Tiêu chí tìm kiếm không hợp lệ!");
+            };
+
+            ResponseDataGetUser res = (ResponseDataGetUser) response;
+            if (userOpt.isPresent()) {
+                UserDTO dto = userOpt.get();
+
+                // ✅ Convert sang View Model trung gian (Use Case model)
+                UserViewItem item = new UserViewItem();
+                item.id = dto.id;
+                item.username = dto.username;
+                item.fullName = dto.fullName;
+                item.email = dto.email;
+                item.phone = dto.phone;
+                item.address = dto.address;
+                item.status = dto.status;
+
+                res.user = item;
+                res.success = true;
+                res.message = "Tìm thấy người dùng!";
+            } else {
+                res.user = null;
+                res.success = false;
+                res.message = "Không tìm thấy người dùng!";
             }
-            
-            // 2. Tìm user theo searchBy
-            Optional<UserDTO> result = findUser(input.searchBy, input.searchValue);
-            
-            if (!result.isPresent()) {
-                output.success = false;
-                output.message = "USER_NOT_FOUND";
-                presenter.present(output);
-                return;
-            }
-            
-            // 3. Convert DTO → UserInfoData
-            output.user = convertToUserInfoData(result.get());
-            output.success = true;
-            output.message = "Lấy thông tin người dùng thành công!";
-            presenter.present(output);
-            
+
         } catch (Exception ex) {
-            output.success = false;
-            output.message = ex.getMessage();
-            presenter.present(output);
+            response.success = false;
+            response.message = "Lỗi hệ thống: " + ex.getMessage();
         }
-    }
-    
-    private Optional<UserDTO> findUser(String searchBy, String searchValue) {
-        switch (searchBy.toLowerCase()) {
-            case "id":
-                return repository.findById(searchValue);
-            case "username":
-                return repository.findByUsername(searchValue);
-            case "email":
-                return repository.findByEmail(searchValue);
-            case "phone":
-                return repository.findByPhone(searchValue);
-            default:
-                return Optional.empty();
-        }
-    }
-    
-    private boolean isValidSearchType(String type) {
-        return type != null && 
-               (type.equalsIgnoreCase("id") || 
-                type.equalsIgnoreCase("username") || 
-                type.equalsIgnoreCase("email") || 
-                type.equalsIgnoreCase("phone"));
-    }
-    
-    private GetUserInfoData convertToUserInfoData(UserDTO dto) {
-        GetUserInfoData info = new GetUserInfoData();
-        info.id = dto.id;
-        info.username = dto.username;
-        info.fullName = dto.fullName;
-        info.email = dto.email;
-        info.phone = dto.phone;
-        info.address = dto.address;
-        info.status = dto.status;
-        return info;
     }
 }

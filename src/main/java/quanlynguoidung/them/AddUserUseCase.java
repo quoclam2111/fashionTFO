@@ -18,7 +18,7 @@ public class AddUserUseCase extends QuanLyNguoiDungControl {
     }
     
     @Override
-    protected void execute(QuanLyNguoiDungRequestData request) {
+	public void execute(QuanLyNguoiDungRequestData request) {
         try {
             // 1. Validate input - sẽ ném ngoại lệ nếu sai
             User.checkUsername(request.username);

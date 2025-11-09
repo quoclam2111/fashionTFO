@@ -1,6 +1,6 @@
-package quanlynguoidung.get;
+package adapters.get;
 
-public class GetUserInputData {
+public class GetUserInputDTO {
     public String searchBy;    // "id", "username", "email", "phone"
     public String searchValue;
 }

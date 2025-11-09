@@ -3,6 +3,7 @@ package quanlynguoidung.list;
 import quanlynguoidung.*;
 import repository.ListUsersRepositoryGateway;
 import repository.DTO.UserDTO;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,28 +13,41 @@ public class ListUsersUseCase extends QuanLyNguoiDungControl {
     public ListUsersUseCase(ListUsersRepositoryGateway repository,
                             QuanLyNguoiDungOutputBoundary presenter) {
         super(presenter);
+        this.response = new ResponseDataListUsers(); // Quan trọng: response phải là ResponseDataListUsers
         this.repository = repository;
-        this.response = new ResponseDataListUsers();
     }
 
     @Override
-    protected void execute(QuanLyNguoiDungRequestData request) {
+    public void execute(QuanLyNguoiDungRequestData request) {
         try {
-            // 1. Lấy tất cả users
+            // 1. Lấy tất cả users (từ DB → DTO)
             List<UserDTO> allUsers = repository.findAll();
 
-            // 2. Lọc theo status
+            // 2. Lọc theo trạng thái
             List<UserDTO> filteredUsers = filterByStatus(allUsers, request.statusFilter);
 
             // 3. Sắp xếp
             sortUsers(filteredUsers, request.sortBy, request.ascending);
 
-            // 4. Set response
-            response.success = true;
-            response.message = "Lấy danh sách thành công!";
-            response.users = filteredUsers;
-            response.totalCount = allUsers.size();
-            response.filteredCount = filteredUsers.size();
+            // 4. Chuyển UserDTO → UserListItem (Use Case model)
+            List<UserListItem> items = filteredUsers.stream().map(dto -> {
+                UserListItem item = new UserListItem();
+                item.id = dto.id;
+                item.username = dto.username;
+                item.fullName = dto.fullName;
+                item.email = dto.email;
+                item.phone = dto.phone;
+                item.status = dto.status;
+                return item;
+            }).collect(Collectors.toList());
+
+            // 5. Set response
+            ResponseDataListUsers res = (ResponseDataListUsers) this.response;
+            res.success = true;
+            res.message = "Lấy danh sách thành công!";
+            res.users = items;
+            res.totalCount = allUsers.size();
+            res.filteredCount = items.size();
 
         } catch (Exception ex) {
             response.success = false;
@@ -46,8 +60,8 @@ public class ListUsersUseCase extends QuanLyNguoiDungControl {
             return users;
         }
         return users.stream()
-                    .filter(u -> u.status.equals(statusFilter))
-                    .collect(Collectors.toList());
+                .filter(u -> u.status.equals(statusFilter))
+                .collect(Collectors.toList());
     }
 
     private void sortUsers(List<UserDTO> users, String sortBy, boolean ascending) {

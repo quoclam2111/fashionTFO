@@ -1,273 +1,218 @@
 package repository.jdbc;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import repository.*;
+import repository.DTO.UserDTO;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-import org.springframework.aot.generate.ValueCodeGenerator.Delegate;
+/**
+ * Implementation cho tất cả các Repository Gateway
+ */
+public class UserRepoImpl implements AddUserRepoGateway, GetUserRepositoryGateway, 
+                                     UpdateUserRepositoryGateway, DeleteUserRepositoryGateway, ListUsersRepositoryGateway {
 
-import quanlynguoidung.User;
-import repository.AddUserRepoGateway;
-import repository.DeleteUserRepositoryGateway;
-import repository.GetUserRepositoryGateway;
-import repository.ListUsersRepositoryGateway;
-import repository.UpdateUserRepositoryGateway;
-import repository.DTO.UserDTO;
-
-
-public class UserRepoImpl implements AddUserRepoGateway, ListUsersRepositoryGateway, GetUserRepositoryGateway, UpdateUserRepositoryGateway, DeleteUserRepositoryGateway{
-
-	public void save(UserDTO dto) {
-	    String sql = """
-	        INSERT INTO users (user_id, username, password_hash, full_name, email, phone, address, status)
-	        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-	    """;
-
-	    try (Connection conn = DBConnection.getConnection();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, dto.id == null ? UUID.randomUUID().toString() : dto.id);
-            ps.setString(2, dto.username);
-            ps.setString(3, dto.password); // mật khẩu đã hash nếu cần
-            ps.setString(4, dto.fullName);
-            ps.setString(5, dto.email);
-            ps.setString(6, dto.phone);
-            ps.setString(7, dto.address);
-            ps.setString(8, dto.status);
-	        int rows = ps.executeUpdate();
-	        if (rows > 0) {
-	            System.out.println("✅ User saved successfully!");
-	        } else {
-	            System.out.println("⚠️ User not saved!");
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
-	
-	@Override
-    public boolean existsByEmail(String email) {
-        String sql = "SELECT 1 FROM users WHERE email = ?";
+    // ==================== ADD USER ====================
+    @Override
+    public void save(UserDTO dto) {
+        String sql = "INSERT INTO users (user_id, username, password_hash, full_name, email, phone, address, status) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, dto.id);
+            stmt.setString(2, dto.username);
+            stmt.setString(3, dto.password);
+            stmt.setString(4, dto.fullName);
+            stmt.setString(5, dto.email);
+            stmt.setString(6, dto.phone);
+            stmt.setString(7, dto.address);
+            stmt.setString(8, dto.status);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi khi lưu user: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
         }
     }
-	
-	 @Override
-	    public boolean existsByUsername(String username) {
-	        String sql = "SELECT 1 FROM users WHERE username = ?";
-	        try (Connection conn = DBConnection.getConnection();
-	             PreparedStatement ps = conn.prepareStatement(sql)) {
-	            ps.setString(1, username);
-	            ResultSet rs = ps.executeQuery();
-	            return rs.next();
-	        } catch (Exception e) {
-	            throw new RuntimeException(e);
-	        }
-	    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        return existsByQuery(sql, email);
+    }
 
     @Override
     public boolean existsByPhone(String phone) {
-        String sql = "SELECT 1 FROM users WHERE phone = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, phone);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String sql = "SELECT COUNT(*) FROM users WHERE phone = ?";
+        return existsByQuery(sql, phone);
     }
-   
 
     @Override
-    public List<UserDTO> findAll() {
-        List<UserDTO> users = new ArrayList<>();
-        String sql = "SELECT * FROM users ORDER BY full_name";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            
-            while (rs.next()) {
-                UserDTO dto = mapResultSetToDTO(rs);
-                users.add(dto);
-            }
-            
-            System.out.println("✅ Loaded " + users.size() + " users");
-            
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi lấy danh sách user: " + e.getMessage());
-        }
-        
-        return users;
+    public boolean existsByUsername(String username) {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        return existsByQuery(sql, username);
     }
-    
-    // ============================================
-    // IMPLEMENT GetUserRepository
-    // ============================================
+
+    private boolean existsByQuery(String sql, String value) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, value);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi kiểm tra tồn tại: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
+    // ==================== GET USER ====================
     @Override
     public Optional<UserDTO> findById(String id) {
-        String sql = "SELECT * FROM users WHERE user_id = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                UserDTO dto = mapResultSetToDTO(rs);
-                System.out.println("✅ User found: " + dto.username);
-                return Optional.of(dto);
-            } else {
-                System.out.println("⚠️ User not found with id: " + id);
-                return Optional.empty();
-            }
-            
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi tìm user: " + e.getMessage());
-        }
+        return findUserByQuery("SELECT * FROM users WHERE user_id = ?", id);
     }
-    
+
     @Override
     public Optional<UserDTO> findByUsername(String username) {
-        String sql = "SELECT * FROM users WHERE username = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                UserDTO dto = mapResultSetToDTO(rs);
-                return Optional.of(dto);
-            }
-            
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi tìm user theo username: " + e.getMessage());
-        }
-        
-        return Optional.empty();
+        return findUserByQuery("SELECT * FROM users WHERE username = ?", username);
     }
-    
+
     @Override
     public Optional<UserDTO> findByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                UserDTO dto = mapResultSetToDTO(rs);
-                return Optional.of(dto);
-            }
-            
-        } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi tìm user theo email: " + e.getMessage());
-        }
-        
-        return Optional.empty();
+        return findUserByQuery("SELECT * FROM users WHERE email = ?", email);
     }
-    
+
     @Override
     public Optional<UserDTO> findByPhone(String phone) {
-        String sql = "SELECT * FROM users WHERE phone = ?";
-        
+        return findUserByQuery("SELECT * FROM users WHERE phone = ?", phone);
+    }
+
+    private Optional<UserDTO> findUserByQuery(String sql, String value) {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, phone);
-            ResultSet rs = ps.executeQuery();
-            
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, value);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                UserDTO dto = mapResultSetToDTO(rs);
-                return Optional.of(dto);
+                return Optional.of(mapResultSetToDTO(rs));
             }
-            
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi khi tìm user: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi tìm user theo phone: " + e.getMessage());
+            throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
         }
-        
         return Optional.empty();
     }
-    
-    // ============================================
-    // IMPLEMENT UpdateUserRepository
-    // ============================================
+
+    // ==================== UPDATE USER ====================
     @Override
-    public void update(UserDTO dto) {
-        String sql = """
-            UPDATE users 
-            SET username = ?, password_hash = ?, full_name = ?, 
-                email = ?, phone = ?, address = ?, status = ?
-            WHERE user_id = ?
-        """;
-        
+    public void update(UserDTO user) {
+        String sql = "UPDATE users SET full_name = ?, email = ?, phone = ?, " +
+                     "address = ?, status = ?, password = ? WHERE user_id = ?";
+
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, dto.username);
-            ps.setString(2, dto.password);
-            ps.setString(3, dto.fullName);
-            ps.setString(4, dto.email);
-            ps.setString(5, dto.phone);
-            ps.setString(6, dto.address);
-            ps.setString(7, dto.status);
-            ps.setString(8, dto.id);
-            
-            int rows = ps.executeUpdate();
-            
-            if (rows > 0) {
-                System.out.println("✅ User updated successfully: " + dto.username);
-            } else {
-                System.out.println("⚠️ User not found with id: " + dto.id);
-                throw new RuntimeException("USER_NOT_FOUND");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, user.fullName);
+            stmt.setString(2, user.email);
+            stmt.setString(3, user.phone);
+            stmt.setString(4, user.address);
+            stmt.setString(5, user.status);
+            stmt.setString(6, user.password);
+            stmt.setString(7, user.id);
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Không tìm thấy user để cập nhật!");
             }
-            
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi khi cập nhật user: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi cập nhật user: " + e.getMessage());
+            throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
         }
     }
-    
-    // ============================================
-    // IMPLEMENT DeleteUserRepository
-    // ============================================
+
+    @Override
+    public boolean existsByEmailExcludingUser(String email, String userId) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ? AND user_id != ?";
+        return existsByQueryExcludingUser(sql, email, userId);
+    }
+
+    @Override
+    public boolean existsByPhoneExcludingUser(String phone, String userId) {
+        String sql = "SELECT COUNT(*) FROM users WHERE phone = ? AND user_id != ?";
+        return existsByQueryExcludingUser(sql, phone, userId);
+    }
+
+    private boolean existsByQueryExcludingUser(String sql, String value, String userId) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, value);
+            stmt.setString(2, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi kiểm tra tồn tại: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
+    // ==================== DELETE USER ====================
     @Override
     public void deleteById(String id) {
         String sql = "DELETE FROM users WHERE user_id = ?";
-        
+
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, id);
-            int rows = ps.executeUpdate();
-            
-            if (rows > 0) {
-                System.out.println("✅ User deleted successfully with id: " + id);
-            } else {
-                System.out.println("⚠️ User not found with id: " + id);
-                throw new RuntimeException("USER_NOT_FOUND");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Không tìm thấy user để xóa!");
             }
-            
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi khi xóa user: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi xóa user: " + e.getMessage());
+            throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
         }
     }
-    private UserDTO mapResultSetToDTO(ResultSet rs) throws Exception {
+
+    // ==================== LIST USERS ====================
+    @Override
+    public List<UserDTO> findAll() {
+        List<UserDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM users";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(mapResultSetToDTO(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
+        }
+        return list;
+    }
+
+    // ==================== HELPER ====================
+    private UserDTO mapResultSetToDTO(ResultSet rs) throws SQLException {
         UserDTO dto = new UserDTO();
         dto.id = rs.getString("user_id");
         dto.username = rs.getString("username");
@@ -279,6 +224,4 @@ public class UserRepoImpl implements AddUserRepoGateway, ListUsersRepositoryGate
         dto.status = rs.getString("status");
         return dto;
     }
-	
-
 }

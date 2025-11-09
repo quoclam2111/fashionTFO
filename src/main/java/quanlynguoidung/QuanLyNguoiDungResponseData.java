@@ -3,7 +3,7 @@ package quanlynguoidung;
 import java.util.Date;
 import java.util.List;
 
-
+import quanlynguoidung.get.UserViewItem;
 import repository.DTO.UserDTO;
 
 /**
@@ -15,7 +15,7 @@ public class QuanLyNguoiDungResponseData {
     public Date timestamp;
     
     // Data cho "get" action
-    public UserDTO user;
+    public UserViewItem user;
     
     // Data cho "list" action
     public List<UserDTO> users;

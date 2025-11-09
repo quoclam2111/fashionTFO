@@ -1,7 +1,7 @@
-package quanlynguoidung.get;
+package quanlynguoidung.list;
 
-public class GetUserInfoData {
-	public String id;
+public class UserListItem {
+    public String id;
     public String username;
     public String fullName;
     public String email;

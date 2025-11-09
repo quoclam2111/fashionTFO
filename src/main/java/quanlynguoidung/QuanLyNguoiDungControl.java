@@ -2,7 +2,7 @@ package quanlynguoidung;
 
 import java.util.Date;
 
-public abstract class QuanLyNguoiDungControl {
+public abstract class QuanLyNguoiDungControl implements QuanLyNguoiDungInputBoundary {
     protected QuanLyNguoiDungOutputBoundary out;
     protected QuanLyNguoiDungResponseData response;
     
@@ -14,7 +14,7 @@ public abstract class QuanLyNguoiDungControl {
         this.out = out;
     }
     
-    protected abstract void execute(QuanLyNguoiDungRequestData req);
+    public abstract void execute(QuanLyNguoiDungRequestData req);
     
     /**
      * Template Method - định nghĩa luồng chung

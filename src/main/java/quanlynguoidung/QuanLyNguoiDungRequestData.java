@@ -20,4 +20,8 @@ public class QuanLyNguoiDungRequestData {
     public String sortBy;       // "fullname", "email", "username"
     public boolean ascending;
 
+    
+    // Data cho action "update" & "delete"
+    public String userId;      // ID của user cần update/delete
+    public String status;      // Trạng thái mới cho update
 }
