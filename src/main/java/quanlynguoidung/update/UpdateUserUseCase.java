@@ -31,14 +31,14 @@ public class UpdateUserUseCase extends QuanLyNguoiDungControl {
                 return;
             }
             
-            UserDTO existingUser = existingUserOpt.get();
+            UserDTO dto = existingUserOpt.get();
             
             // 2. Validate dữ liệu mới
             if (request.fullName != null) {
-                existingUser.fullName = request.fullName;
+            	dto.fullName = request.fullName;
             }
             
-            if (request.email != null && !request.email.equals(existingUser.email)) {
+            if (request.email != null && !request.email.equals(dto.email)) {
                 User.checkEmail(request.email);
                 
                 // Kiểm tra email mới đã được dùng chưa
@@ -47,10 +47,10 @@ public class UpdateUserUseCase extends QuanLyNguoiDungControl {
                     response.message = "Email này đã được sử dụng bởi người khác!";
                     return;
                 }
-                existingUser.email = request.email;
+                dto.email = request.email;
             }
             
-            if (request.phone != null && !request.phone.equals(existingUser.phone)) {
+            if (request.phone != null && !request.phone.equals(dto.phone)) {
                 User.checkPhone(request.phone);
                 
                 // Kiểm tra phone mới đã được dùng chưa
@@ -59,31 +59,41 @@ public class UpdateUserUseCase extends QuanLyNguoiDungControl {
                     response.message = "Số điện thoại này đã được sử dụng bởi người khác!";
                     return;
                 }
-                existingUser.phone = request.phone;
+                dto.phone = request.phone;
             }
             
             if (request.address != null) {
-                existingUser.address = request.address;
+            	dto.address = request.address;
             }
             
             if (request.status != null) {
-                existingUser.status = request.status;
+            	dto.status = request.status;
             }
             
             // 3. Cập nhật password nếu có (optional)
             if (request.password != null && !request.password.trim().isEmpty()) {
                 User.checkPassword(request.password);
-                existingUser.password = request.password;
+                dto.password = request.password;
             }
             
             // 4. Lưu vào database
-            repository.update(existingUser);
+            repository.update(dto);
             
-            // 5. Set response
+            // 5. ✅ Convert UserDTO → UserUpdateViewItem
             ResponseDataUpdateUser updateResponse = (ResponseDataUpdateUser) response;
+            
+            UserUpdateViewItem viewItem = new UserUpdateViewItem();
+            viewItem.id = dto.id;
+            viewItem.username = dto.username;
+            viewItem.fullName = dto.fullName;
+            viewItem.email = dto.email;
+            viewItem.phone = dto.phone;
+            viewItem.address = dto.address;
+            viewItem.status = dto.status;
+            
+            updateResponse.updatedUser = viewItem;
             updateResponse.success = true;
             updateResponse.message = "Cập nhật người dùng thành công!";
-            updateResponse.updatedUser = existingUser;
             
         } catch (IllegalArgumentException ex) {
             response.success = false;

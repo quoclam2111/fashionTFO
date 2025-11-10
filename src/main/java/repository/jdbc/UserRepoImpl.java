@@ -116,7 +116,7 @@ public class UserRepoImpl implements AddUserRepoGateway, GetUserRepositoryGatewa
     @Override
     public void update(UserDTO user) {
         String sql = "UPDATE users SET full_name = ?, email = ?, phone = ?, " +
-                     "address = ?, status = ?, password = ? WHERE user_id = ?";
+                     "address = ?, status = ?, password_hash = ? WHERE user_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

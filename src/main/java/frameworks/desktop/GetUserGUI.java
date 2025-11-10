@@ -13,86 +13,100 @@ import java.awt.*;
 
 public class GetUserGUI extends JFrame {
     private JTextField txtUserId;
-    private JButton btnGet;
     private JTextArea txtResult;
 
     public GetUserGUI() {
-        setTitle("Lấy thông tin người dùng");
-        setSize(500, 400);
+        setTitle("Xem Thông Tin Người Dùng");
+        setSize(550, 450);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.setLayout(new BorderLayout(10, 10));
 
-        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // ========== PANEL HEADER (chỉ hiển thị User ID) ==========
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        inputPanel.setBorder(BorderFactory.createTitledBorder("Thông Tin"));
+        
         JLabel lblUserId = new JLabel("User ID:");
-        txtUserId = new JTextField(20);
-        btnGet = new JButton("🔍 Lấy thông tin");
-        btnGet.setBackground(new Color(72, 163, 255));
-        btnGet.setForeground(Color.WHITE);
-        btnGet.setFocusPainted(false);
-        btnGet.setFont(new Font("Arial", Font.BOLD, 14));
+        txtUserId = new JTextField(40);
+        txtUserId.setEditable(false); // Không cho edit
+        txtUserId.setBackground(new Color(233, 236, 239));
 
         inputPanel.add(lblUserId);
         inputPanel.add(txtUserId);
-        inputPanel.add(btnGet);
 
-        txtResult = new JTextArea(10, 40);
+        // ========== PANEL RESULT ==========
+        JPanel resultPanel = new JPanel(new BorderLayout());
+        resultPanel.setBorder(BorderFactory.createTitledBorder("Thông Tin Chi Tiết"));
+        
+        txtResult = new JTextArea(18, 40);
         txtResult.setEditable(false);
-        txtResult.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        txtResult.setFont(new Font("Monospaced", Font.PLAIN, 13));
         JScrollPane scrollPane = new JScrollPane(txtResult);
+        resultPanel.add(scrollPane, BorderLayout.CENTER);
 
         panel.add(inputPanel, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(resultPanel, BorderLayout.CENTER);
 
         add(panel);
-
-        // Xử lý sự kiện khi click nút
-        btnGet.addActionListener(e -> {
-            String userId = txtUserId.getText().trim();
-            if (userId.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập User ID", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            try {
-                GetUserInputDTO dto = new GetUserInputDTO();
-                dto.searchBy = "id";        // ✅ chỉ định tìm theo ID
-                dto.searchValue = userId;   // ✅ giá trị nhập từ UI
-
-                GetUserViewModel viewModel = new GetUserViewModel();
-                GetUserPresenter presenter = new GetUserPresenter(viewModel);
-
-                UserRepoImpl repo = new UserRepoImpl();
-                GetUserUseCase useCase = new GetUserUseCase(repo, presenter);
-
-                GetUserController controller = new GetUserController(useCase);
-                controller.execute(dto);
-
-                if (viewModel.success) {
-                    UserViewItem user = viewModel.user;
-                    txtResult.setText(
-                            "Tên đăng nhập: " + user.username + "\n" +
-                            "Họ tên: " + user.fullName + "\n" +
-                            "Email: " + user.email + "\n" +
-                            "SĐT: " + user.phone + "\n" +
-                            "Địa chỉ: " + user.address + "\n" +
-                            "Thời gian: " + viewModel.timestamp
-                    );
-                } else {
-                    JOptionPane.showMessageDialog(this, viewModel.message, "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        
         setVisible(true);
+    }
+    
+    // ✅ Method để set User ID từ bên ngoài
+    public void setUserId(String userId) {
+        txtUserId.setText(userId);
+        handleGet(); // Tự động load thông tin
+    }
+    
+    private void handleGet() {
+        String userId = txtUserId.getText().trim();
+        if (userId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập User ID", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            GetUserInputDTO dto = new GetUserInputDTO();
+            dto.searchBy = "id";
+            dto.searchValue = userId;
+
+            GetUserViewModel viewModel = new GetUserViewModel();
+            GetUserPresenter presenter = new GetUserPresenter(viewModel);
+
+            UserRepoImpl repo = new UserRepoImpl();
+            GetUserUseCase useCase = new GetUserUseCase(repo, presenter);
+
+            GetUserController controller = new GetUserController(useCase);
+            controller.execute(dto);
+
+            if (viewModel.success) {
+                UserViewItem user = viewModel.user;
+                StringBuilder result = new StringBuilder();
+                result.append("=== THÔNG TIN NGƯỜI DÙNG ===\n\n");
+                result.append("ID: ").append(user.id).append("\n");
+                result.append("Tên đăng nhập: ").append(user.username).append("\n");
+                result.append("Họ tên: ").append(user.fullName).append("\n");
+                result.append("Email: ").append(user.email).append("\n");
+                result.append("Số điện thoại: ").append(user.phone).append("\n");
+                result.append("Địa chỉ: ").append(user.address).append("\n");
+                result.append("Trạng thái: ").append(user.status).append("\n");
+                result.append("\nThời gian: ").append(viewModel.timestamp);
+                
+                txtResult.setText(result.toString());
+            } else {
+                JOptionPane.showMessageDialog(this, viewModel.message, "Lỗi", JOptionPane.ERROR_MESSAGE);
+                txtResult.setText("");
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {
-        new GetUserGUI();
+        SwingUtilities.invokeLater(() -> new GetUserGUI());
     }
 }

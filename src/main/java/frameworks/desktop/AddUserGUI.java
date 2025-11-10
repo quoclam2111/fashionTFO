@@ -22,8 +22,8 @@ public class AddUserGUI extends JFrame {
         setTitle("Thêm người dùng");
         setSize(450, 300);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // ← Chỉ đóng form này, không tắt app
+        
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.setLayout(new BorderLayout(10, 10));
@@ -71,7 +71,6 @@ public class AddUserGUI extends JFrame {
         add(panel);
 
         btnAdd.addActionListener(e -> {
-        
             AddUserInputDTO dto = new AddUserInputDTO();
             dto.username = txtUsername.getText();
             dto.password = new String(txtPassword.getPassword());
@@ -85,7 +84,6 @@ public class AddUserGUI extends JFrame {
             
             UserRepoImpl repo = new UserRepoImpl();
             AddUserUseCase uc = new AddUserUseCase(repo, presenter);
-
             
             AddUserController controller = new AddUserController(uc);
 
@@ -93,28 +91,32 @@ public class AddUserGUI extends JFrame {
                 controller.execute(dto);
                 if(model.success) {
                     // Thêm thành công → hiển thị thông báo
-                	JOptionPane.showMessageDialog(this, 
-                            model.message + "\nUser ID: " + model.userId +
-                            "\nThời gian: " + model.timestamp,
-                            "Thành công", 
-                            JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, 
+                        model.message + "\nUser ID: " + model.userId +
+                        "\nThời gian: " + model.timestamp,
+                        "Thành công", 
+                        JOptionPane.INFORMATION_MESSAGE);
 
-                    // Sau khi người dùng bấm OK → xóa form
+                    // ✅ Xóa form để chuẩn bị thêm tiếp (nếu muốn)
                     txtUsername.setText(""); 
                     txtPassword.setText(""); 
                     txtFullName.setText("");
                     txtEmail.setText(""); 
                     txtPhone.setText(""); 
                     txtAddress.setText("");
+                    
+                    // ✅ ĐÓNG FORM và trigger WindowListener để refresh
+                    dispose(); // Đóng form, WindowListener sẽ tự động gọi loadUsers()
+                    
                 } else {
                     // Thêm thất bại → hiển thị lỗi, giữ nguyên dữ liệu
                     JOptionPane.showMessageDialog(this, model.message,
-                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception ex) {
                 // Bắt lỗi không mong muốn → giữ nguyên dữ liệu
                 JOptionPane.showMessageDialog(this, ex.getMessage(),
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
 
