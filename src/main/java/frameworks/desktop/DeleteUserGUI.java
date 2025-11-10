@@ -330,7 +330,7 @@ public class DeleteUserGUI extends JFrame implements Subscriber {
             input.userId = userId;
 
             // Gọi controller
-            controller.execute(input);
+            controller.executeWithDTO(input);
             
             // Notify để update UI
             publisher.notifySubscribers();

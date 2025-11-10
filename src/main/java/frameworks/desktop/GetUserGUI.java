@@ -80,7 +80,7 @@ public class GetUserGUI extends JFrame {
             GetUserUseCase useCase = new GetUserUseCase(repo, presenter);
 
             GetUserController controller = new GetUserController(useCase);
-            controller.execute(dto);
+            controller.executeWithDTO(dto);
 
             if (viewModel.success) {
                 UserViewItem user = viewModel.user;

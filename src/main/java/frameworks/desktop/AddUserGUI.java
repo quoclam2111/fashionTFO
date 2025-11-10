@@ -88,7 +88,7 @@ public class AddUserGUI extends JFrame {
             AddUserController controller = new AddUserController(uc);
 
             try {
-                controller.execute(dto);
+                controller.executeWithDTO(dto);
                 if(model.success) {
                     // Thêm thành công → hiển thị thông báo
                     JOptionPane.showMessageDialog(this, 

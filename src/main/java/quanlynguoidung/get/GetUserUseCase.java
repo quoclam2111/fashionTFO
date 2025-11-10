@@ -20,7 +20,7 @@ public class GetUserUseCase extends QuanLyNguoiDungControl {
     }
     
     @Override
-    public void execute(QuanLyNguoiDungRequestData request) {
+    protected void execute(QuanLyNguoiDungRequestData request) {
         try {
             if (request.searchBy == null || request.searchValue == null || request.searchValue.isBlank()) {
                 response.success = false;

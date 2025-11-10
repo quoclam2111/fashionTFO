@@ -18,7 +18,7 @@ public class ListUsersUseCase extends QuanLyNguoiDungControl {
     }
 
     @Override
-    public void execute(QuanLyNguoiDungRequestData request) {
+    protected void execute(QuanLyNguoiDungRequestData request) {
         try {
             // 1. Lấy tất cả users (từ DB → DTO)
             List<UserDTO> allUsers = repository.findAll();

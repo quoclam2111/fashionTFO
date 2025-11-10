@@ -3,7 +3,7 @@ package adapters.list;
 import java.util.List;
 
 import quanlynguoidung.list.UserListItem;
-import repository.DTO.UserDTO;
+
 
 public class ListUsersViewModel extends ListUsersPublisher {
     public String message;

@@ -3,22 +3,30 @@ package adapters.get;
 import quanlynguoidung.*;
 import quanlynguoidung.get.GetUserUseCase;
 
-public class GetUserController {
+public class GetUserController implements QuanLyNguoiDungInputBoundary {
     private final GetUserUseCase useCase;
-
+    
     public GetUserController(GetUserUseCase useCase) {
         this.useCase = useCase;
     }
-
-    /**
-     * Nhận input từ View, đóng gói thành RequestData và gọi UseCase.
-     */
-    public void execute(GetUserInputDTO input) {
+    
+    // Method cho GUI layer - nhận DTO
+    public void executeWithDTO(GetUserInputDTO input) {
+        QuanLyNguoiDungRequestData request = convertToRequestData(input);
+        execute(request);
+    }
+    
+    // Method implement từ interface - nhận RequestData
+    @Override
+    public void execute(QuanLyNguoiDungRequestData request) {
+        useCase.control(request);
+    }
+    
+    // Helper method để convert
+    private QuanLyNguoiDungRequestData convertToRequestData(GetUserInputDTO input) {
         QuanLyNguoiDungRequestData request = new QuanLyNguoiDungRequestData();
         request.searchBy = input.searchBy;
         request.searchValue = input.searchValue;
-
-        // 👉 Gọi control() để tự động thêm timestamp + present()
-        useCase.control(request);
+        return request;
     }
 }

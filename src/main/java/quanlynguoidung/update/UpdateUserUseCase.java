@@ -5,7 +5,7 @@ import java.util.Optional;
 import quanlynguoidung.QuanLyNguoiDungControl;
 import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
 import quanlynguoidung.QuanLyNguoiDungRequestData;
-import quanlynguoidung.User;
+
 import repository.UpdateUserRepositoryGateway;
 import repository.DTO.UserDTO;
 
@@ -20,9 +20,13 @@ public class UpdateUserUseCase extends QuanLyNguoiDungControl {
     }
     
     @Override
-    public void execute(QuanLyNguoiDungRequestData request) {
+    protected void execute(QuanLyNguoiDungRequestData request) {
         try {
-            // 1. Kiểm tra user có tồn tại không
+            // 1. Convert request → UpdateUser entity và validate
+            UpdateUser user = convertToBusinessObject(request);
+            user.validate();
+            
+            // 2. Kiểm tra user có tồn tại không
             Optional<UserDTO> existingUserOpt = repository.findById(request.userId);
             
             if (!existingUserOpt.isPresent()) {
@@ -33,65 +37,32 @@ public class UpdateUserUseCase extends QuanLyNguoiDungControl {
             
             UserDTO dto = existingUserOpt.get();
             
-            // 2. Validate dữ liệu mới
-            if (request.fullName != null) {
-            	dto.fullName = request.fullName;
-            }
-            
+            // 4. Kiểm tra email mới đã được dùng chưa
             if (request.email != null && !request.email.equals(dto.email)) {
-                User.checkEmail(request.email);
-                
-                // Kiểm tra email mới đã được dùng chưa
                 if (repository.existsByEmailExcludingUser(request.email, request.userId)) {
                     response.success = false;
                     response.message = "Email này đã được sử dụng bởi người khác!";
                     return;
                 }
-                dto.email = request.email;
             }
             
+            // 5. Kiểm tra phone mới đã được dùng chưa
             if (request.phone != null && !request.phone.equals(dto.phone)) {
-                User.checkPhone(request.phone);
-                
-                // Kiểm tra phone mới đã được dùng chưa
                 if (repository.existsByPhoneExcludingUser(request.phone, request.userId)) {
                     response.success = false;
                     response.message = "Số điện thoại này đã được sử dụng bởi người khác!";
                     return;
                 }
-                dto.phone = request.phone;
             }
             
-            if (request.address != null) {
-            	dto.address = request.address;
-            }
+            updateDTOFromRequest(dto, request);
             
-            if (request.status != null) {
-            	dto.status = request.status;
-            }
-            
-            // 3. Cập nhật password nếu có (optional)
-            if (request.password != null && !request.password.trim().isEmpty()) {
-                User.checkPassword(request.password);
-                dto.password = request.password;
-            }
-            
-            // 4. Lưu vào database
+            // 6. Lưu vào database
             repository.update(dto);
             
-            // 5. ✅ Convert UserDTO → UserUpdateViewItem
+            // 7. Set response
             ResponseDataUpdateUser updateResponse = (ResponseDataUpdateUser) response;
-            
-            UserUpdateViewItem viewItem = new UserUpdateViewItem();
-            viewItem.id = dto.id;
-            viewItem.username = dto.username;
-            viewItem.fullName = dto.fullName;
-            viewItem.email = dto.email;
-            viewItem.phone = dto.phone;
-            viewItem.address = dto.address;
-            viewItem.status = dto.status;
-            
-            updateResponse.updatedUser = viewItem;
+            updateResponse.updatedUser = convertToViewItem(dto);
             updateResponse.success = true;
             updateResponse.message = "Cập nhật người dùng thành công!";
             
@@ -102,5 +73,65 @@ public class UpdateUserUseCase extends QuanLyNguoiDungControl {
             response.success = false;
             response.message = "Lỗi hệ thống: " + ex.getMessage();
         }
+    }
+    
+    /**
+     * Convert Request → UpdateUser Entity
+     */
+    private UpdateUser convertToBusinessObject(QuanLyNguoiDungRequestData request) {
+        return new UpdateUser(
+            request.userId,
+            request.fullName,
+            request.email,
+            request.phone,
+            request.address,
+            request.status,
+            request.password
+        );
+    }
+    
+    /**
+     * Cập nhật DTO từ request (chỉ update các field không null)
+     */
+    private void updateDTOFromRequest(UserDTO dto, QuanLyNguoiDungRequestData request) {
+        if (request.fullName != null) {
+            dto.fullName = request.fullName;
+        }
+        
+        if (request.email != null) {
+            dto.email = request.email;
+        }
+        
+        if (request.phone != null) {
+            dto.phone = request.phone;
+        }
+        
+        if (request.address != null) {
+            dto.address = request.address;
+        }
+        
+        if (request.status != null) {
+            dto.status = request.status;
+        }
+        
+        // Cập nhật password nếu có
+        if (request.password != null && !request.password.trim().isEmpty()) {
+            dto.password = request.password;
+        }
+    }
+    
+    /**
+     * Convert UserDTO → UserUpdateViewItem
+     */
+    private UserUpdateViewItem convertToViewItem(UserDTO dto) {
+        UserUpdateViewItem viewItem = new UserUpdateViewItem();
+        viewItem.id = dto.id;
+        viewItem.username = dto.username;
+        viewItem.fullName = dto.fullName;
+        viewItem.email = dto.email;
+        viewItem.phone = dto.phone;
+        viewItem.address = dto.address;
+        viewItem.status = dto.status;
+        return viewItem;
     }
 }

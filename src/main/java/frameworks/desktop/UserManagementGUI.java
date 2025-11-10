@@ -270,7 +270,7 @@ public class UserManagementGUI extends JFrame {
         ListUsersController controller = new ListUsersController(uc);
 
         try {
-            controller.execute(dto);
+            controller.executeWithDTO(dto);
 
             if (model.success) {
                 tableModel.setRowCount(0);
@@ -387,7 +387,7 @@ public class UserManagementGUI extends JFrame {
             adapters.delete.DeleteUserController controller = 
                 new adapters.delete.DeleteUserController(useCase);
             
-            controller.execute(input);
+            controller.executeWithDTO(input);
             
             if (viewModel.success) {
                 JOptionPane.showMessageDialog(this, 

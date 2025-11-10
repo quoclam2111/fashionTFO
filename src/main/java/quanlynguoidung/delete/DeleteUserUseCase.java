@@ -20,7 +20,7 @@ public class DeleteUserUseCase extends QuanLyNguoiDungControl {
     }
     
     @Override
-    public void execute(QuanLyNguoiDungRequestData request) {
+    protected void execute(QuanLyNguoiDungRequestData request) {
         try {
             // 1. Validate input
             if (request.userId == null || request.userId.trim().isEmpty()) {

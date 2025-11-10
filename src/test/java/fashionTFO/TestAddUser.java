@@ -727,7 +727,7 @@ public class TestAddUser {
         AddUserController controller = new AddUserController(useCase);
         
         // Act - Thực thi action
-        controller.execute(inputDTO);
+        controller.executeWithDTO(inputDTO);
         
         // Track để cleanup sau test
         if (viewModel.userId != null) {
@@ -761,7 +761,7 @@ public class TestAddUser {
         AddUserController controller = new AddUserController(useCase);
         
         // Act
-        controller.execute(inputDTO);
+        controller.executeWithDTO(inputDTO);
         
         // Assert - Phải thất bại
         assertFalse(viewModel.success, "Add user should fail with empty username");
@@ -786,7 +786,7 @@ public class TestAddUser {
         AddUserPresenter presenter1 = new AddUserPresenter(viewModel1);
         AddUserUseCase useCase1 = new AddUserUseCase(repository, presenter1);
         AddUserController controller1 = new AddUserController(useCase1);
-        controller1.execute(inputDTO1);
+        controller1.executeWithDTO(inputDTO1);
         
         if (viewModel1.userId != null) {
             createdUserIds.add(viewModel1.userId);
@@ -806,7 +806,7 @@ public class TestAddUser {
         AddUserController controller2 = new AddUserController(useCase2);
         
         // Act
-        controller2.execute(inputDTO2);
+        controller2.executeWithDTO(inputDTO2);
         
         // Assert - Phải thất bại vì email trùng
         assertFalse(viewModel2.success, "Add user should fail with duplicate email");
@@ -836,7 +836,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter = new AddUserPresenter(addViewModel);
         AddUserUseCase addUseCase = new AddUserUseCase(repository, addPresenter);
         AddUserController addController = new AddUserController(addUseCase);
-        addController.execute(addDTO);
+        addController.executeWithDTO(addDTO);
         
         assertTrue(addViewModel.success, "Add user should succeed: " + addViewModel.message);
         
@@ -854,7 +854,7 @@ public class TestAddUser {
         GetUserController getController = new GetUserController(getUseCase);
         
         // Act
-        getController.execute(getDTO);
+        getController.executeWithDTO(getDTO);
         
         // Assert - Phải tìm thấy user với đúng thông tin
         assertTrue(getViewModel.success, "Get user should succeed");
@@ -881,7 +881,7 @@ public class TestAddUser {
         GetUserController getController = new GetUserController(getUseCase);
         
         // Act
-        getController.execute(getDTO);
+        getController.executeWithDTO(getDTO);
         
         // Assert - Phải thất bại
         assertFalse(getViewModel.success, "Get user should fail with invalid ID");
@@ -912,7 +912,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter = new AddUserPresenter(addViewModel);
         AddUserUseCase addUseCase = new AddUserUseCase(repository, addPresenter);
         AddUserController addController = new AddUserController(addUseCase);
-        addController.execute(addDTO);
+        addController.executeWithDTO(addDTO);
         
         String userId = addViewModel.userId;
         createdUserIds.add(userId);
@@ -987,7 +987,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter = new AddUserPresenter(addViewModel);
         AddUserUseCase addUseCase = new AddUserUseCase(repository, addPresenter);
         AddUserController addController = new AddUserController(addUseCase);
-        addController.execute(addDTO);
+        addController.executeWithDTO(addDTO);
         
         String userId = addViewModel.userId;
         // Không add vào createdUserIds vì sẽ tự xóa trong test
@@ -1002,7 +1002,7 @@ public class TestAddUser {
         DeleteUserController deleteController = new DeleteUserController(deleteUseCase);
         
         // Act
-        deleteController.execute(deleteDTO);
+        deleteController.executeWithDTO(deleteDTO);
         
         // Assert - Kiểm tra xóa thành công
         assertTrue(deleteViewModel.success, "Delete user should succeed");
@@ -1018,7 +1018,7 @@ public class TestAddUser {
         GetUserPresenter getPresenter = new GetUserPresenter(getViewModel);
         GetUserUseCase getUseCase = new GetUserUseCase(repository, getPresenter);
         GetUserController getController = new GetUserController(getUseCase);
-        getController.execute(getDTO);
+        getController.executeWithDTO(getDTO);
         
         assertFalse(getViewModel.success, "User should not exist after deletion");
     }
@@ -1039,7 +1039,7 @@ public class TestAddUser {
         DeleteUserController deleteController = new DeleteUserController(deleteUseCase);
         
         // Act
-        deleteController.execute(deleteDTO);
+        deleteController.executeWithDTO(deleteDTO);
         
         // Assert - Phải thất bại
         assertFalse(deleteViewModel.success, "Delete should fail with invalid user ID");
@@ -1067,7 +1067,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter = new AddUserPresenter(addViewModel);
         AddUserUseCase addUseCase = new AddUserUseCase(repository, addPresenter);
         AddUserController addController = new AddUserController(addUseCase);
-        addController.execute(addDTO);
+        addController.executeWithDTO(addDTO);
         
         createdUserIds.add(addViewModel.userId);
         
@@ -1083,7 +1083,7 @@ public class TestAddUser {
         ListUsersController listController = new ListUsersController(listUseCase);
         
         // Act
-        listController.execute(listDTO);
+        listController.executeWithDTO(listDTO);
         
         // Assert
         assertTrue(listViewModel.success, "List users should succeed");
@@ -1109,7 +1109,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter = new AddUserPresenter(addViewModel);
         AddUserUseCase addUseCase = new AddUserUseCase(repository, addPresenter);
         AddUserController addController = new AddUserController(addUseCase);
-        addController.execute(addDTO);
+        addController.executeWithDTO(addDTO);
         
         createdUserIds.add(addViewModel.userId);
         
@@ -1125,7 +1125,7 @@ public class TestAddUser {
         ListUsersController listController = new ListUsersController(listUseCase);
         
         // Act
-        listController.execute(listDTO);
+        listController.executeWithDTO(listDTO);
         
         // Assert
         assertTrue(listViewModel.success, "List users should succeed");
@@ -1155,7 +1155,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter1 = new AddUserPresenter(addViewModel1);
         AddUserUseCase addUseCase1 = new AddUserUseCase(repository, addPresenter1);
         AddUserController addController1 = new AddUserController(addUseCase1);
-        addController1.execute(addDTO1);
+        addController1.executeWithDTO(addDTO1);
         createdUserIds.add(addViewModel1.userId);
         
         AddUserInputDTO addDTO2 = new AddUserInputDTO();
@@ -1169,7 +1169,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter2 = new AddUserPresenter(addViewModel2);
         AddUserUseCase addUseCase2 = new AddUserUseCase(repository, addPresenter2);
         AddUserController addController2 = new AddUserController(addUseCase2);
-        addController2.execute(addDTO2);
+        addController2.executeWithDTO(addDTO2);
         createdUserIds.add(addViewModel2.userId);
         
         // Arrange - List with sorting
@@ -1184,7 +1184,7 @@ public class TestAddUser {
         ListUsersController listController = new ListUsersController(listUseCase);
         
         // Act
-        listController.execute(listDTO);
+        listController.executeWithDTO(listDTO);
         
         // Assert
         assertTrue(listViewModel.success, "List users should succeed");
@@ -1220,7 +1220,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter = new AddUserPresenter(addViewModel);
         AddUserUseCase addUseCase = new AddUserUseCase(repository, addPresenter);
         AddUserController addController = new AddUserController(addUseCase);
-        addController.execute(addDTO);
+        addController.executeWithDTO(addDTO);
         
         String userId = addViewModel.userId;
         createdUserIds.add(userId);
@@ -1250,7 +1250,7 @@ public class TestAddUser {
         ListUsersController listController = new ListUsersController(listUseCase);
         
         // Act
-        listController.execute(listDTO);
+        listController.executeWithDTO(listDTO);
         
         // Assert
         assertTrue(listViewModel.success, "List should succeed: " + listViewModel.message);
@@ -1298,7 +1298,7 @@ public class TestAddUser {
         AddUserPresenter addPresenter = new AddUserPresenter(addViewModel);
         AddUserUseCase addUseCase = new AddUserUseCase(repository, addPresenter);
         AddUserController addController = new AddUserController(addUseCase);
-        addController.execute(addDTO);
+        addController.executeWithDTO(addDTO);
         
         assertTrue(addViewModel.success, "Step 1: Create user should succeed");
         String userId = addViewModel.userId;
@@ -1312,7 +1312,7 @@ public class TestAddUser {
         GetUserPresenter getPresenter = new GetUserPresenter(getViewModel);
         GetUserUseCase getUseCase = new GetUserUseCase(repository, getPresenter);
         GetUserController getController = new GetUserController(getUseCase);
-        getController.execute(getDTO);
+        getController.executeWithDTO(getDTO);
         
         assertTrue(getViewModel.success, "Step 2: Read user should succeed");
         assertEquals("CRUD Test User", getViewModel.user.fullName);
@@ -1339,7 +1339,7 @@ public class TestAddUser {
         DeleteUserPresenter deletePresenter = new DeleteUserPresenter(deleteViewModel);
         DeleteUserUseCase deleteUseCase = new DeleteUserUseCase(repository, deletePresenter);
         DeleteUserController deleteController = new DeleteUserController(deleteUseCase);
-        deleteController.execute(deleteDTO);
+        deleteController.executeWithDTO(deleteDTO);
         
         assertTrue(deleteViewModel.success, "Step 4: Delete user should succeed");
         
@@ -1348,7 +1348,7 @@ public class TestAddUser {
         GetUserPresenter verifyPresenter = new GetUserPresenter(verifyViewModel);
         GetUserUseCase verifyUseCase = new GetUserUseCase(repository, verifyPresenter);
         GetUserController verifyController = new GetUserController(verifyUseCase);
-        verifyController.execute(getDTO);
+        verifyController.executeWithDTO(getDTO);
         
         assertFalse(verifyViewModel.success, "Step 5: User should not exist after deletion");
     }

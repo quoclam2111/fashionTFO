@@ -18,25 +18,22 @@ public class AddUserUseCase extends QuanLyNguoiDungControl {
     }
     
     @Override
-	public void execute(QuanLyNguoiDungRequestData request) {
-        try {
-            // 1. Validate input - sẽ ném ngoại lệ nếu sai
-            User.checkUsername(request.username);
-            User.checkPassword(request.password);
-            User.checkEmail(request.email);
-            User.checkPhone(request.phone);
+	protected void execute(QuanLyNguoiDungRequestData request) {
+    	try {
+            // 1. Convert input → AddUser entity
+            AddUser user = convertToBusinessObject(request);
             
-            // 2. Kiểm tra email đã tồn tại
+            // 2. Validate input - sẽ ném ngoại lệ nếu sai
+            user.validate();
+            
+            // 3. Kiểm tra email đã tồn tại
             if (repository.existsByEmail(request.email)) {
                 response.success = false;
                 response.message = "Email này đã được sử dụng!";
-                return; // ⭐ RETURN để không chạy tiếp
+                return;
             }
             
-            // 3. Convert input → User entity (Business Object)
-            User user = convertToBusinessObject(request);
-            
-            // 4. Convert User → UserDTO
+            // 4. Convert AddUser → UserDTO
             UserDTO dto = convertToDTO(user);
             
             // 5. Save vào repository
@@ -63,23 +60,21 @@ public class AddUserUseCase extends QuanLyNguoiDungControl {
     /**
      * Convert Request → Business Object (User Entity)
      */
-    private User convertToBusinessObject(QuanLyNguoiDungRequestData request) {
-        return new User(
-            null,                   // ID sẽ tự sinh UUID
+    private AddUser convertToBusinessObject(QuanLyNguoiDungRequestData request) {
+        return new AddUser(
             request.username,
             request.password,
             request.fullName,
             request.email,
             request.phone,
-            request.address,
-            "active"                // default status
+            request.address
         );
     }
     
     /**
      * Convert Domain User → UserDTO
      */
-    private UserDTO convertToDTO(User user) {
+    private UserDTO convertToDTO(AddUser user) {
         UserDTO dto = new UserDTO();
         dto.id = user.getId();
         dto.username = user.getUsername();

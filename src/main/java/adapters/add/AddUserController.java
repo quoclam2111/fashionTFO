@@ -1,18 +1,30 @@
 package adapters.add;
 
+import quanlynguoidung.QuanLyNguoiDungInputBoundary;
 import quanlynguoidung.QuanLyNguoiDungRequestData;
-
 import quanlynguoidung.them.AddUserUseCase;
 
-public class AddUserController {
+public class AddUserController implements QuanLyNguoiDungInputBoundary {
     private final AddUserUseCase control;
-
+    
     public AddUserController(AddUserUseCase control) {
         this.control = control;
     }
-
-    public void execute(AddUserInputDTO dto) {
-        // Convert GUI DTO → Request Data
+    
+    // Method cho GUI layer - nhận DTO
+    public void executeWithDTO(AddUserInputDTO dto) {
+        QuanLyNguoiDungRequestData req = convertToRequestData(dto);
+        execute(req);
+    }
+    
+    // Method implement từ interface - nhận RequestData
+    @Override
+    public void execute(QuanLyNguoiDungRequestData req) {
+        control.control(req);
+    }
+    
+    // Helper method để convert
+    private QuanLyNguoiDungRequestData convertToRequestData(AddUserInputDTO dto) {
         QuanLyNguoiDungRequestData req = new QuanLyNguoiDungRequestData();
         req.username = dto.username;
         req.password = dto.password;
@@ -20,9 +32,6 @@ public class AddUserController {
         req.email = dto.email;
         req.phone = dto.phone;
         req.address = dto.address;
-        
-        // Gọi control (Template Method)
-        control.control(req);
-
+        return req;
     }
 }
