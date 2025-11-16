@@ -23,7 +23,8 @@ public class ViewCartUseCase implements ViewCartInputBoundary {
             outputList.add(new ViewCartOutputData(
                     dto.getProductName(),
                     dto.getPrice(),
-                    dto.getQuantity()
+                    dto.getQuantity(),
+                    dto.getVariantId()
             ));
         }
 
