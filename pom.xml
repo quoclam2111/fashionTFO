@@ -19,11 +19,7 @@
     <artifactId>mysql-connector-j</artifactId>
     <version>8.1.0</version> <!-- dùng version mới nhất -->
 </dependency>
-    <dependency>
-    	<groupId>com.nql</groupId>
-    	<artifactId>du_an_fashionTFO</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
-    </dependency>
+    
     <dependency>
     <groupId>org.junit.jupiter</groupId>
     <artifactId>junit-jupiter</artifactId>
