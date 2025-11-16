@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/fashion_store";
-    private static final String USER = "root"; 
-    private static final String PASS = "123456"; 
-    
+    private static final String USER = "root";
+    private static final String PASS = "123456";
+
     static {
         try {
             // Load MySQL JDBC Driver
@@ -17,7 +17,7 @@ public class DBConnection {
             throw new RuntimeException("MySQL JDBC Driver không tìm thấy!", e);
         }
     }
-    
+
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
