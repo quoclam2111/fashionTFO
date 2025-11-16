@@ -30,6 +30,7 @@ public class Order {
         this.note = note;
     }
 
+
     // ⭐ Validation methods với message tiếng Việt
     public static void checkCustomerName(String name) {
         if(name == null || name.trim().isEmpty())
@@ -40,8 +41,9 @@ public class Order {
         if(phone == null || phone.trim().isEmpty())
             throw new IllegalArgumentException("Vui lòng nhập số điện thoại!");
 
-        if(!phone.matches("\\d{9,12}"))
-            throw new IllegalArgumentException("Số điện thoại phải từ 9-12 chữ số!");
+        // ✅ FIXED: Phải bắt đầu bằng số 0 và có 10-11 chữ số
+        if(!phone.matches("^0\\d{9,10}$"))
+            throw new IllegalArgumentException("Số điện thoại phải bắt đầu bằng số 0 và có 10-11 chữ số!");
     }
 
     public static void checkCustomerAddress(String address) {

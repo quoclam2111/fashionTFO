@@ -124,10 +124,9 @@ public class MainMenuGUI extends JFrame {
     }
     
     private void openOrderManagement() {
-        JOptionPane.showMessageDialog(this, 
-            "Chức năng Quản Lý Đơn Hàng đang được phát triển!", 
-            "Thông Báo", 
-            JOptionPane.INFORMATION_MESSAGE);
+        ListOrdersGUI orderGUI = new ListOrdersGUI();
+        orderGUI.setVisible(true);
+
     }
     
     private void openStatistics() {

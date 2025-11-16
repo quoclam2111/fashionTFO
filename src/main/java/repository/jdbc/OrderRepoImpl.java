@@ -205,23 +205,61 @@ public class OrderRepoImpl implements AddOrderRepoGateway,
     // ============================================
     @Override
     public void deleteById(String id) {
-        String sql = "DELETE FROM orders WHERE order_id = ?";
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false); // Bật transaction
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            // BƯỚC 1: Xóa shipping (thông tin giao hàng)
+            String sqlDeleteShipping = "DELETE FROM shipping WHERE order_id = ?";
+            try (PreparedStatement psShipping = conn.prepareStatement(sqlDeleteShipping)) {
+                psShipping.setString(1, id);
+                int shippingDeleted = psShipping.executeUpdate();
+                System.out.println("🚚 Đã xóa " + shippingDeleted + " shipping records");
+            }
 
-            ps.setString(1, id);
-            int rows = ps.executeUpdate();
+            // BƯỚC 2: Xóa order_items (chi tiết sản phẩm)
+            String sqlDeleteItems = "DELETE FROM order_items WHERE order_id = ?";
+            try (PreparedStatement psItems = conn.prepareStatement(sqlDeleteItems)) {
+                psItems.setString(1, id);
+                int itemsDeleted = psItems.executeUpdate();
+                System.out.println("🗑️ Đã xóa " + itemsDeleted + " order items");
+            }
 
-            if (rows > 0) {
-                System.out.println("✅ Order deleted successfully with id: " + id);
-            } else {
-                System.out.println("⚠️ Order not found with id: " + id);
-                throw new RuntimeException("ORDER_NOT_FOUND");
+            // BƯỚC 3: Xóa orders (đơn hàng chính)
+            String sqlDeleteOrder = "DELETE FROM orders WHERE order_id = ?";
+            try (PreparedStatement psOrder = conn.prepareStatement(sqlDeleteOrder)) {
+                psOrder.setString(1, id);
+                int rows = psOrder.executeUpdate();
+
+                if (rows > 0) {
+                    conn.commit(); // Commit transaction
+                    System.out.println("✅ Đã xóa đơn hàng thành công: " + id);
+                } else {
+                    conn.rollback(); // Rollback nếu không tìm thấy
+                    System.out.println("⚠️ Không tìm thấy đơn hàng với ID: " + id);
+                    throw new RuntimeException("ORDER_NOT_FOUND");
+                }
             }
 
         } catch (Exception e) {
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback nếu có lỗi
+                } catch (Exception rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
             throw new RuntimeException("Lỗi khi xóa đơn hàng: " + e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true); // Khôi phục auto-commit
+                    conn.close();
+                } catch (Exception closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
         }
     }
 

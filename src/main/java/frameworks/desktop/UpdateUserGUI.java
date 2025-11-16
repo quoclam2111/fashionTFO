@@ -333,7 +333,7 @@ public class UpdateUserGUI extends JFrame implements Subscriber {
         gbc.gridx = 0; gbc.gridy = 5;
         panelInput.add(new JLabel("Trạng Thái:"), gbc);
         gbc.gridx = 1;
-        cboStatus = new JComboBox<>(new String[]{"", "active", "inactive"});
+        cboStatus = new JComboBox<>(new String[]{"", "active", "inactive","locked","banned"});
         panelInput.add(cboStatus, gbc);
 
         // Password (optional)

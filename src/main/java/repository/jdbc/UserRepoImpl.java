@@ -8,14 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-<<<<<<< Updated upstream
+
 /**
  * Implementation cho tất cả các Repository Gateway
  */
 public class UserRepoImpl implements AddUserRepoGateway, GetUserRepositoryGateway, 
                                      UpdateUserRepositoryGateway, DeleteUserRepositoryGateway, ListUsersRepositoryGateway {
-=======
->>>>>>> Stashed changes
+
 
     // ==================== ADD USER ====================
     @Override
