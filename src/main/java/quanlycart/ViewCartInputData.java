@@ -1,4 +1,4 @@
-package quanlynguoidung.cart;
+package quanlycart;
 
 public class ViewCartInputData {
     private final String userId;

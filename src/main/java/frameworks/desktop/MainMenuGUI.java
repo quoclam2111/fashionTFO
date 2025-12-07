@@ -61,9 +61,9 @@ public class MainMenuGUI extends JFrame {
         
         // Row 3
         gbc.gridx = 0; gbc.gridy = 2;
-        mainPanel.add(createMenuButton("⚙️ Cài Đặt Hệ Thống", 
+        mainPanel.add(createMenuButton("Quản lý giỏ hàng", 
             new Color(108, 117, 125), 
-            e -> openSettings()), gbc);
+            e -> openCartManagerment()), gbc);
         
         gbc.gridx = 1;
         mainPanel.add(createMenuButton("🚪 Đăng Xuất", 
@@ -137,11 +137,9 @@ public class MainMenuGUI extends JFrame {
             JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void openSettings() {
-        JOptionPane.showMessageDialog(this, 
-            "Chức năng Cài Đặt Hệ Thống đang được phát triển!", 
-            "Thông Báo", 
-            JOptionPane.INFORMATION_MESSAGE);
+    private void openCartManagerment() {
+        CartManagementGUI cartGUI = new CartManagementGUI();
+        cartGUI.setVisible(true);
     }
     
     private void logout() {

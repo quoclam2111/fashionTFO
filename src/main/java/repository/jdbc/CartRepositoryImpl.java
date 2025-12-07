@@ -8,7 +8,7 @@ import java.util.*;
 public class CartRepositoryImpl implements CartRepository {
 
     @Override
-    public List<CartDTO> findCartItemsByUserId(String userId) {
+    public List<CartDTO> findCartItemsByUserId(String userId) throws SQLException {
         List<CartDTO> list = new ArrayList<>();
         String sql = """
             SELECT 
@@ -31,17 +31,20 @@ public class CartRepositoryImpl implements CartRepository {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                String productName = rs.getString("productName");
+                double price = rs.getDouble("price");
+                int quantity = rs.getInt("quantity");
+                
                 list.add(new CartDTO(
                         rs.getString("productId"),
-                        rs.getString("productName"),
-                        rs.getDouble("price"),
-                        rs.getInt("quantity"),
-                        rs.getString("variantId")  // ← Thêm tham số thứ 5
+                        productName,
+                        price,
+                        quantity,
+                        rs.getString("variantId")
                 ));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        
         return list;
     }
 
@@ -137,6 +140,7 @@ public class CartRepositoryImpl implements CartRepository {
         }
         return "Unknown Product";
     }
+
     @Override
     public int getQuantityInCart(String userId, String variantId) {
         String sql = """
@@ -166,14 +170,11 @@ public class CartRepositoryImpl implements CartRepository {
     @Override
     public boolean addToCart(String userId, String variantId, int quantity) {
         try (Connection conn = DBConnection.getConnection()) {
-            // 1. Lấy hoặc tạo cart_id cho user
             String cartId = getOrCreateCart(userId, conn);
             
-            // 2. Kiểm tra xem item đã tồn tại trong giỏ chưa
             int existingQuantity = getQuantityInCart(userId, variantId);
             
             if (existingQuantity > 0) {
-                // Update quantity nếu đã tồn tại
                 String updateSql = """
                     UPDATE cart_items ci
                     JOIN carts c ON ci.cart_id = c.cart_id
@@ -190,14 +191,13 @@ public class CartRepositoryImpl implements CartRepository {
                     return rowsAffected > 0;
                 }
             } else {
-                // Insert mới nếu chưa có
                 String insertSql = """
                     INSERT INTO cart_items (item_id, cart_id, variant_id, quantity)
                     VALUES (?, ?, ?, ?)
                 """;
                 
                 try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
-                    stmt.setString(1, UUID.randomUUID().toString());
+                    stmt.setString(1, java.util.UUID.randomUUID().toString());
                     stmt.setString(2, cartId);
                     stmt.setString(3, variantId);
                     stmt.setInt(4, quantity);
@@ -213,11 +213,7 @@ public class CartRepositoryImpl implements CartRepository {
         }
     }
     
-    /**
-     * Lấy cart_id của user, nếu chưa có thì tạo mới
-     */
     private String getOrCreateCart(String userId, Connection conn) throws SQLException {
-        // Kiểm tra xem user đã có cart chưa
         String selectSql = "SELECT cart_id FROM carts WHERE user_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(selectSql)) {
             stmt.setString(1, userId);
@@ -228,8 +224,7 @@ public class CartRepositoryImpl implements CartRepository {
             }
         }
         
-        // Nếu chưa có, tạo cart mới
-        String cartId = UUID.randomUUID().toString();
+        String cartId = java.util.UUID.randomUUID().toString();
         String insertSql = "INSERT INTO carts (cart_id, user_id) VALUES (?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
             stmt.setString(1, cartId);
@@ -285,6 +280,24 @@ public class CartRepositoryImpl implements CartRepository {
             return false;
         }
     }
-    
-    private static final java.util.UUID UUID = null;
+
+    @Override
+    public boolean userExists(String userId) {
+        String sql = "SELECT COUNT(*) as count FROM users WHERE user_id = ? AND status = 'active'";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getInt("count") > 0;
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

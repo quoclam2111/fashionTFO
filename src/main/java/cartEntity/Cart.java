@@ -1,4 +1,4 @@
-package quanlynguoidung.cart.entity;
+package cartEntity;
 
 import java.util.List;
 

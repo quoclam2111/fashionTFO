@@ -1,4 +1,4 @@
-package quanlynguoidung.cart;
+package quanlycart;
 
 public class ViewCartOutputData {
     private final String productName;

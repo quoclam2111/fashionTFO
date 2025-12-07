@@ -1,4 +1,4 @@
-package quanlynguoidung.cart.entity;
+package cartEntity;
 
 public class CartItem {
     private int productId;

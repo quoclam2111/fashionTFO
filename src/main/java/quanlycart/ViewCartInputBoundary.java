@@ -1,4 +1,4 @@
-package quanlynguoidung.cart;
+package quanlycart;
 
 public interface ViewCartInputBoundary {
     void execute(ViewCartInputData inputData);
