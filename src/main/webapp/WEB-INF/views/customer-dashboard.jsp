@@ -180,6 +180,11 @@
             color: white;
         }
 
+        .card-icon.profile {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
         .card h3 {
             color: #333;
             margin-bottom: 10px;
@@ -236,11 +241,12 @@
     <nav class="navbar">
         <div class="navbar-content">
             <div class="logo">Fashion Store</div>
-            
+
             <ul class="nav-menu">
                 <li><a href="${pageContext.request.contextPath}/home">Sản phẩm</a></li>
                 <li><a href="#cart">Giỏ hàng</a></li>
                 <li><a href="#orders">Đơn hàng</a></li>
+                <li><a href="${pageContext.request.contextPath}/customer/profile">Tài khoản</a></li>
             </ul>
             
             <div class="user-menu">
@@ -278,6 +284,12 @@
                 <div class="card-icon orders">📦</div>
                 <h3>Đơn hàng của tôi</h3>
                 <p>Theo dõi trạng thái đơn hàng</p>
+            </div>
+
+            <div class="card" onclick="location.href='${pageContext.request.contextPath}/customer/profile'">
+                <div class="card-icon profile">👤</div>
+                <h3>Thông tin cá nhân</h3>
+                <p>Xem và cập nhật thông tin tài khoản</p>
             </div>
         </div>
 

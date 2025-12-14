@@ -2,7 +2,14 @@
 <%
     String currentPage = request.getParameter("activePage");
     if (currentPage == null) {
-        currentPage = request.getRequestURI();
+        String uri = request.getRequestURI();
+        if (uri.contains("users")) {
+            currentPage = "users";
+        } else if (uri.contains("products")) {
+            currentPage = "products";
+        } else if (uri.contains("dashboard")) {
+            currentPage = "dashboard";
+        }
     }
 %>
 <style>
@@ -83,21 +90,21 @@
     <ul class="sidebar-menu">
         <li>
             <a href="${pageContext.request.contextPath}/admin/dashboard" 
-               class="<%= currentPage.contains("dashboard") ? "active" : "" %>">
+               class="<%= "dashboard".equals(currentPage) ? "active" : "" %>">
                 <span class="icon">📊</span>
                 Dashboard
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/admin/users"
-               class="<%= currentPage.contains("users") ? "active" : "" %>">
+               class="<%= "users".equals(currentPage) ? "active" : "" %>">
                 <span class="icon">👥</span>
                 Quản lý người dùng
             </a>
         </li>
         <li>
             <a href="${pageContext.request.contextPath}/admin/products"
-               class="<%= currentPage.contains("products") ? "active" : "" %>">
+               class="<%= "products".equals(currentPage) ? "active" : "" %>">
                 <span class="icon">📦</span>
                 Quản lý sản phẩm
             </a>
