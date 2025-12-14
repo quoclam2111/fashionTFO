@@ -180,11 +180,6 @@
             color: white;
         }
 
-        .card-icon.profile {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            color: white;
-        }
-
         .card h3 {
             color: #333;
             margin-bottom: 10px;
@@ -243,7 +238,7 @@
             <div class="logo">Fashion Store</div>
             
             <ul class="nav-menu">
-                <li><a href="#products">Sản phẩm</a></li>
+                <li><a href="${pageContext.request.contextPath}/home">Sản phẩm</a></li>
                 <li><a href="#cart">Giỏ hàng</a></li>
                 <li><a href="#orders">Đơn hàng</a></li>
             </ul>
@@ -267,7 +262,7 @@
 
     <div class="container">
         <div class="dashboard-cards">
-            <div class="card" onclick="alert('Chức năng đang được phát triển')">
+            <div class="card" onclick="location.href='${pageContext.request.contextPath}/home'">
                 <div class="card-icon products">🛍️</div>
                 <h3>Danh sách sản phẩm</h3>
                 <p>Xem và mua các sản phẩm thời trang mới nhất</p>
@@ -284,19 +279,13 @@
                 <h3>Đơn hàng của tôi</h3>
                 <p>Theo dõi trạng thái đơn hàng</p>
             </div>
-
-            <div class="card" onclick="location.href='${pageContext.request.contextPath}/customer/profile'">
-                <div class="card-icon profile">👤</div>
-                <h3>Thông tin cá nhân</h3>
-                <p>Cập nhật thông tin tài khoản</p>
-            </div>
         </div>
 
         <h2 class="section-title">Các chức năng sắp ra mắt</h2>
         <div class="coming-soon">
             <h2>🚀 Đang phát triển</h2>
             <p>Chúng tôi đang làm việc chăm chỉ để mang đến cho bạn trải nghiệm mua sắm tuyệt vời nhất.<br>
-               Các tính năng sản phẩm, giỏ hàng, và thanh toán sẽ sớm được tích hợp!</p>
+               Các tính năng giỏ hàng và thanh toán sẽ sớm được tích hợp!</p>
         </div>
     </div>
 </body>
