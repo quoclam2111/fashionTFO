@@ -3,7 +3,7 @@ package repository.payment;
 import java.util.Optional;
 import java.util.UUID;
 
-import pay.entity.Order;
+import entity.Order;
 
 public interface OrderPaymentRepository {
     void save(Order order);

@@ -1,4 +1,4 @@
-package pay.entity;
+package entity;
 
 public class OrderItem {
     private final String productId;

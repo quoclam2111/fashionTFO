@@ -1,9 +1,9 @@
 package payment.createorder;
 
-import application.port.CartRepository;
-import pay.entity.Order;
-import pay.entity.OrderItem;
-import pay.entity.PaymentMethod;
+import repository.cart.CartRepository;
+import entity.Order;
+import entity.OrderItem;
+import entity.PaymentMethod;
 import payment.provideshipping.ShippingFeeCalculator;
 import repository.DTO.ResultPaymentDTO;
 import repository.payment.OrderPaymentRepository;
@@ -38,28 +38,28 @@ public class CreateOrderPaymentUseCase {
             return;
         }
 
-        List<OrderItem> items = cartRepo.getCartForUser(input.userId);
-        if (items == null || items.isEmpty()) {
-            presenter.presentError("Cart is empty");
-            return;
-        }
-
-        try {
-            Order order = new Order(UUID.randomUUID(), items);
-            order.calculateItemTotal();
-            order.calculateShippingFee(shippingCalc, input.distanceKm);
-
-            // default payment method none -> vat 0
-            order.calculateVATFor(null);
-            order.calculateFinalAmount();
-
-            orderRepo.save(order);
-
-            List<String> summary = items.stream().map(i -> i.getName() + " x" + i.getQuantity() + " = " + i.getTotal()).collect(Collectors.toList());
-            CreateOrderOutputModel out = new CreateOrderOutputModel(order.getId().toString(), summary, order.getItemTotal(), order.getShippingFee(), order.getVat(), order.getFinalAmount());
-            presenter.present(out);
-        } catch (Exception ex) {
-            presenter.presentError("Unexpected error: " + ex.getMessage());
-        }
+//        List<OrderItem> items = cartRepo.getCartForUser(input.userId);
+//        if (items == null || items.isEmpty()) {
+//            presenter.presentError("Cart is empty");
+//            return;
+//        }
+//
+//        try {
+//            Order order = new Order(UUID.randomUUID(), items);
+//            order.calculateItemTotal();
+//            order.calculateShippingFee(shippingCalc, input.distanceKm);
+//
+//            // default payment method none -> vat 0
+//            order.calculateVATFor(null);
+//            order.calculateFinalAmount();
+//
+//            orderRepo.save(order);
+//
+//            List<String> summary = items.stream().map(i -> i.getName() + " x" + i.getQuantity() + " = " + i.getTotal()).collect(Collectors.toList());
+//            CreateOrderOutputModel out = new CreateOrderOutputModel(order.getId().toString(), summary, order.getItemTotal(), order.getShippingFee(), order.getVat(), order.getFinalAmount());
+//            presenter.present(out);
+//        } catch (Exception ex) {
+//            presenter.presentError("Unexpected error: " + ex.getMessage());
+//        }
     }
 }

@@ -1,4 +1,4 @@
-package adapter.payment.provideshipping;
+package adapters.payment.provideshipping;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
 package payment.processpayment;
 
-import repository.Publisher;
+import repository.payment.Publisher;
 import repository.DTO.ResultPaymentDTO;
 
 import java.util.List;
 
-import adapter.payment.processpayment.ProcessPaymentViewModel;
+import adapters.payment.processpayment.ProcessPaymentViewModel;
 
 public class ProcessPaymentPresenterImpl implements ProcessPaymentPresenter {
 

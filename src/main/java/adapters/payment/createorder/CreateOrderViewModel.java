@@ -1,4 +1,4 @@
-package adapter.payment.createorder;
+package adapters.payment.createorder;
 
 import java.util.List;
 
