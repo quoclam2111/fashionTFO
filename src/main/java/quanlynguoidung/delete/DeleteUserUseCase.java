@@ -1,8 +1,8 @@
 package quanlynguoidung.delete;
 
 import quanlynguoidung.*;
-import repository.DeleteUserRepositoryGateway;
 import repository.DTO.UserDTO;
+import repository.user.DeleteUserRepositoryGateway;
 
 import java.util.Optional;
 

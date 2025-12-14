@@ -112,22 +112,60 @@ public class MainMenuGUI extends JFrame {
     }
     
     private void openUserManagement() {
+        // Ẩn MainMenu
+        this.setVisible(false);
+        
+        // Mở UserManagementGUI
         UserManagementGUI userGUI = new UserManagementGUI();
         userGUI.setVisible(true);
+        
+        // Thêm WindowListener để hiện lại Main khi đóng
+        userGUI.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                MainMenuGUI.this.setVisible(true);
+            }
+        });
     }
     
     private void openProductManagement() {
-        JOptionPane.showMessageDialog(this, 
-            "Chức năng Quản Lý Sản Phẩm đang được phát triển!", 
-            "Thông Báo", 
-            JOptionPane.INFORMATION_MESSAGE);
+        // Ẩn MainMenu
+        this.setVisible(false);
+        
+        // Mở ListProductsGUI
+        ListProductsGUI productGUI = new ListProductsGUI();
+        productGUI.setVisible(true);
+        
+        // Đổi EXIT_ON_CLOSE thành DISPOSE_ON_CLOSE
+        productGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        // Thêm WindowListener để hiện lại Main khi đóng
+        productGUI.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                MainMenuGUI.this.setVisible(true);
+            }
+        });
     }
     
     private void openOrderManagement() {
-        JOptionPane.showMessageDialog(this, 
-            "Chức năng Quản Lý Đơn Hàng đang được phát triển!", 
-            "Thông Báo", 
-            JOptionPane.INFORMATION_MESSAGE);
+        // Ẩn MainMenu
+        this.setVisible(false);
+        
+        // Mở ListOrdersGUI
+        ListOrdersGUI orderGUI = new ListOrdersGUI();
+        orderGUI.setVisible(true);
+        
+        // Đổi EXIT_ON_CLOSE thành DISPOSE_ON_CLOSE
+        orderGUI.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        // Thêm WindowListener để hiện lại Main khi đóng
+        orderGUI.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                MainMenuGUI.this.setVisible(true);
+            }
+        });
     }
     
     private void openStatistics() {

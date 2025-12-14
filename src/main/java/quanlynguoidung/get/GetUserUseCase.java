@@ -5,9 +5,9 @@ import java.util.Optional;
 import quanlynguoidung.QuanLyNguoiDungControl;
 import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
 import quanlynguoidung.QuanLyNguoiDungRequestData;
-import quanlynguoidung.QuanLyNguoiDungResponseData;
-import repository.GetUserRepositoryGateway;
+
 import repository.DTO.UserDTO;
+import repository.user.GetUserRepositoryGateway;
 
 public class GetUserUseCase extends QuanLyNguoiDungControl {
     private final GetUserRepositoryGateway repository;

@@ -5,9 +5,8 @@ import java.util.Optional;
 import quanlynguoidung.QuanLyNguoiDungControl;
 import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
 import quanlynguoidung.QuanLyNguoiDungRequestData;
-
-import repository.UpdateUserRepositoryGateway;
 import repository.DTO.UserDTO;
+import repository.user.UpdateUserRepositoryGateway;
 
 public class UpdateUserUseCase extends QuanLyNguoiDungControl {
     private final UpdateUserRepositoryGateway repository;
@@ -36,6 +35,15 @@ public class UpdateUserUseCase extends QuanLyNguoiDungControl {
             }
             
             UserDTO dto = existingUserOpt.get();
+            
+            // 3. Validate status - chỉ cho phép 'active' hoặc 'locked'
+            if (request.status != null && 
+                !request.status.equals("active") && 
+                !request.status.equals("locked")) {
+                response.success = false;
+                response.message = "Trạng thái không hợp lệ! Chỉ chấp nhận: active hoặc locked";
+                return;
+            }
             
             // 4. Kiểm tra email mới đã được dùng chưa
             if (request.email != null && !request.email.equals(dto.email)) {

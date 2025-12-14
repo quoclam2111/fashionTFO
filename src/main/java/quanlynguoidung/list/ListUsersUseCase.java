@@ -1,8 +1,8 @@
 package quanlynguoidung.list;
 
 import quanlynguoidung.*;
-import repository.ListUsersRepositoryGateway;
 import repository.DTO.UserDTO;
+import repository.user.ListUsersRepositoryGateway;
 
 import java.util.List;
 import java.util.stream.Collectors;

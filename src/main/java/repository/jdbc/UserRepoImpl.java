@@ -1,7 +1,12 @@
 package repository.jdbc;
 
-import repository.*;
+
 import repository.DTO.UserDTO;
+import repository.user.DeleteUserRepositoryGateway;
+import repository.user.GetUserRepositoryGateway;
+import repository.user.ListUsersRepositoryGateway;
+import repository.user.RegisterRepoGateway;
+import repository.user.UpdateUserRepositoryGateway;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,7 +16,7 @@ import java.util.Optional;
 /**
  * Implementation cho tất cả các Repository Gateway
  */
-public class UserRepoImpl implements AddUserRepoGateway, GetUserRepositoryGateway, 
+public class UserRepoImpl implements RegisterRepoGateway, GetUserRepositoryGateway, 
                                      UpdateUserRepositoryGateway, DeleteUserRepositoryGateway, ListUsersRepositoryGateway {
 
     // ==================== ADD USER ====================

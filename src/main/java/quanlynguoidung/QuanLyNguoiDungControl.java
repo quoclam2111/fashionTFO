@@ -1,6 +1,6 @@
 package quanlynguoidung;
 
-import java.util.Date;
+
 
 public abstract class QuanLyNguoiDungControl {
     protected QuanLyNguoiDungOutputBoundary out;

@@ -2,7 +2,11 @@ package frameworks.desktop;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import adapters.list.*;
+
+import adapters.quanlynguoidung.list.ListUsersController;
+import adapters.quanlynguoidung.list.ListUsersInputDTO;
+import adapters.quanlynguoidung.list.ListUsersPresenter;
+import adapters.quanlynguoidung.list.ListUsersViewModel;
 import quanlynguoidung.list.ListUsersUseCase;
 import repository.jdbc.UserRepoImpl;
 import java.awt.*;
@@ -299,7 +303,7 @@ public class UserManagementGUI extends JFrame {
     }
 
     private void openAddUser() {
-        AddUserGUI addGUI = new AddUserGUI();
+        RegisterGUI addGUI = new RegisterGUI();
         addGUI.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
@@ -374,18 +378,18 @@ public class UserManagementGUI extends JFrame {
         }
         
         try {
-            adapters.delete.DeleteUserInputDTO input = new adapters.delete.DeleteUserInputDTO();
+            adapters.quanlynguoidung.delete.DeleteUserInputDTO input = new adapters.quanlynguoidung.delete.DeleteUserInputDTO();
             input.userId = userId;
             
-            adapters.delete.DeleteUserViewModel viewModel = new adapters.delete.DeleteUserViewModel();
-            adapters.delete.DeleteUserPresenter presenter = new adapters.delete.DeleteUserPresenter(viewModel);
+            adapters.quanlynguoidung.delete.DeleteUserViewModel viewModel = new adapters.quanlynguoidung.delete.DeleteUserViewModel();
+            adapters.quanlynguoidung.delete.DeleteUserPresenter presenter = new adapters.quanlynguoidung.delete.DeleteUserPresenter(viewModel);
             
             UserRepoImpl repository = new UserRepoImpl();
             quanlynguoidung.delete.DeleteUserUseCase useCase = 
                 new quanlynguoidung.delete.DeleteUserUseCase(repository, presenter);
             
-            adapters.delete.DeleteUserController controller = 
-                new adapters.delete.DeleteUserController(useCase);
+            adapters.quanlynguoidung.delete.DeleteUserController controller = 
+                new adapters.quanlynguoidung.delete.DeleteUserController(useCase);
             
             controller.executeWithDTO(input);
             

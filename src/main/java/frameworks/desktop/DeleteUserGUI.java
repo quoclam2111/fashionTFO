@@ -193,8 +193,12 @@ package frameworks.desktop;
 
 import javax.swing.*;
 import java.awt.*;
-import adapters.delete.*;
-import frameworks.desktop.Subscriber;
+import adapters.quanlynguoidung.delete.DeleteUserController;
+import adapters.quanlynguoidung.delete.DeleteUserInputDTO;
+import adapters.quanlynguoidung.delete.DeleteUserPresenter;
+import adapters.quanlynguoidung.delete.DeleteUserPublisher;
+import adapters.quanlynguoidung.delete.DeleteUserViewModel;
+
 import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
 import quanlynguoidung.delete.DeleteUserUseCase;
 import repository.jdbc.UserRepoImpl;

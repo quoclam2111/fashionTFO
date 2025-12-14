@@ -1,9 +1,9 @@
 package frameworks.desktop;
 
-import adapters.get.GetUserController;
-import adapters.get.GetUserInputDTO;
-import adapters.get.GetUserPresenter;
-import adapters.get.GetUserViewModel;
+import adapters.quanlynguoidung.get.GetUserController;
+import adapters.quanlynguoidung.get.GetUserInputDTO;
+import adapters.quanlynguoidung.get.GetUserPresenter;
+import adapters.quanlynguoidung.get.GetUserViewModel;
 import quanlynguoidung.get.GetUserUseCase;
 import repository.jdbc.UserRepoImpl;
 import quanlynguoidung.get.UserViewItem;
