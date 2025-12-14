@@ -20,7 +20,7 @@ public class OrderRepoImpl implements AddOrderRepoGateway,
     // IMPLEMENT AddOrderRepoGateway
     // ============================================
     @Override
-    public void save(OrderDTO dto) {
+    public String save(OrderDTO dto) {
         String sql = """
             INSERT INTO orders (order_id, user_id, customer_name, customer_phone,
                                 customer_address, total_amount, status, order_date, note)
@@ -49,6 +49,7 @@ public class OrderRepoImpl implements AddOrderRepoGateway,
         } catch (Exception e) {
             throw new RuntimeException("Lỗi khi lưu đơn hàng: " + e.getMessage());
         }
+        return sql;
     }
 
     @Override
