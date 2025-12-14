@@ -5,135 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02c05f38-d61b-4fc0-8464-9be71a4266b2" name="Changes" comment="Hoa don">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea/.idea.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fashionTFO.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/deleteorders/DeleteOrderController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/deleteorders/DeleteOrderInputDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/deleteorders/DeleteOrderOutputDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/deleteorders/DeleteOrderPresenter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/deleteorders/DeleteOrderViewModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/updateorder/UpdateOrderController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/updateorder/UpdateOrderInputDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/updateorder/UpdateOrderOutputDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/updateorder/UpdateOrderPresenter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/adapters/updateorder/UpdateOrderViewModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/frameworks/desktop/UpdateOrderGUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/quanlydonhang/delete/DeleteOrderInputBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/quanlydonhang/delete/DeleteOrderOutputBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/quanlydonhang/delete/DeleteOrderUseCase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/quanlydonhang/update/UpdateOrderInputBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/quanlydonhang/update/UpdateOrderOutputBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/quanlydonhang/update/UpdateOrderUseCase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/test.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/fashionTFO/AddOrderUseCaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frameworks/desktop/ListOrdersGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frameworks/desktop/ListOrdersGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frameworks/desktop/MainMenuGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frameworks/desktop/MainMenuGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frameworks/desktop/UpdateUserGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frameworks/desktop/UpdateUserGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlydonhang/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlydonhang/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlynguoidung/QuanLyNguoiDungOutputBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlynguoidung/QuanLyNguoiDungOutputBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlynguoidung/get/GetUserUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlynguoidung/get/GetUserUseCase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlynguoidung/list/ResponseDataListUsers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlynguoidung/list/ResponseDataListUsers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlynguoidung/list/UserListItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlynguoidung/list/UserListItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlynguoidung/them/ResponseDataAddUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlynguoidung/them/ResponseDataAddUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlynguoidung/update/ResponseDataUpdateUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlynguoidung/update/ResponseDataUpdateUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/quanlynguoidung/update/UserUpdateViewItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/quanlynguoidung/update/UserUpdateViewItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/jdbc/OrderRepoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/jdbc/OrderRepoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repository/jdbc/UserRepoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/jdbc/UserRepoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/fashionTFO/TestAddUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/fashionTFO/TestAddUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserInputDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserInputDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserPresenter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserPresenter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserPublisher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserPublisher.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserViewModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/delete/DeleteUserViewModel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/get/GetUserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/get/GetUserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/get/GetUserInputDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/get/GetUserInputDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/get/GetUserPresenter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/get/GetUserPresenter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/get/GetUserPublisher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/get/GetUserPublisher.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/get/GetUserViewModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/get/GetUserViewModel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/list/ListUsersViewModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/list/ListUsersViewModel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserInputDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserInputDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserPresenter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserPresenter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserPublisher.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserPublisher.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserViewModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/adapters/update/UpdateUserViewModel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/AddUserGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/AddUserGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/DeleteUserGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/DeleteUserGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/GetUserGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/GetUserGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/ListOrdersGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/ListOrdersGUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/ListOrdersGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/ListOrdersGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/ListUsersGUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/ListUsersGUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/MainMenuGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/MainMenuGUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/MainMenuGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/MainMenuGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/UpdateUserGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/UpdateUserGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/frameworks/desktop/UserManagementGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/quanlydonhang/Order.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlydonhang/Order.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/QuanLyNguoiDungControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/QuanLyNguoiDungControl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/QuanLyNguoiDungRequestData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/QuanLyNguoiDungRequestData.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/QuanLyNguoiDungResponseData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/QuanLyNguoiDungResponseData.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/delete/DeleteUserUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/delete/DeleteUserUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/delete/ResponseDataDeleteUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/delete/ResponseDataDeleteUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/GetUserInfoData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/GetUserInputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/GetUserOutputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/GetUserUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/GetUserUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/ResponseDataGetUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/ResponseDataGetUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/UserViewItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/get/UserViewItem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/list/ListUsersUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/list/ListUsersUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/list/ResponseDataListUsers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/list/ResponseDataListUsers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/list/UserListItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/list/UserListItem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/them/AddUserUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/them/AddUserUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/update/ResponseDataUpdateUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/update/ResponseDataUpdateUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/update/UpdateUserUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/update/UpdateUserUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/quanlynguoidung/update/UserUpdateViewItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/quanlynguoidung/update/UserUpdateViewItem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repository/jdbc/OrderRepoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repository/jdbc/OrderRepoImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/repository/jdbc/UserRepoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/repository/jdbc/UserRepoImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/fashionTFO.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/adapters/list/ListUsersViewModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/adapters/list/ListUsersViewModel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/frameworks/desktop/AddUserGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/frameworks/desktop/AddUserGUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/frameworks/desktop/ListUsersGUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/frameworks/desktop/ListUsersGUI.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlydonhang/Order.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlydonhang/Order.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlydonhang/list/ListOrdersUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlydonhang/list/ListOrdersUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlydonhang/them/AddOrderUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlydonhang/them/AddOrderUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/QuanLyNguoiDungControl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/QuanLyNguoiDungControl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/QuanLyNguoiDungRequestData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/QuanLyNguoiDungRequestData.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/QuanLyNguoiDungResponseData.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/QuanLyNguoiDungResponseData.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/get/GetUserInfoData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/get/GetUserInputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/get/GetUserInputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/get/GetUserOutputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/get/GetUserOutputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/get/GetUserUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/get/GetUserUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/list/ListUsersUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/list/ListUsersUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/list/ResponseDataListUsers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/list/ResponseDataListUsers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/them/AddUserUseCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/quanlynguoidung/them/AddUserUseCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/repository/UpdateUserRepositoryGateway.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/repository/UpdateUserRepositoryGateway.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/repository/jdbc/OrderRepoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/repository/jdbc/OrderRepoImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/repository/jdbc/UserRepoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/fashionTFO/WEB-INF/classes/repository/jdbc/UserRepoImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/m2e-wtp/web-resources/META-INF/maven/com.nql/fashionTFO/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-fashionTFO.TestAddUser.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/surefire-reports/fashionTFO.TestAddUser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/fashionTFO/TestAddUser.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,8 +49,11 @@
   "keyToString": {
     "Application.AddOrderGUI.executor": "Run",
     "Application.ListOrdersGUI.executor": "Run",
+    "Application.MainMenuGUI (1).executor": "Run",
     "Application.MainMenuGUI.executor": "Run",
     "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.AddOrderUseCaseTest.executor": "Run",
+    "JUnit.All in fashionTFO.executor": "Run",
     "Maven.MainMenuGUI.executor": "Run",
     "Maven.fashionTFO [clean,install...].executor": "Run",
     "Maven.fashionTFO [clean].executor": "Run",
@@ -197,7 +81,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.MainMenuGUI">
+  <component name="RunManager" selected="JUnit.All in fashionTFO">
     <configuration name="AddOrderGUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="frameworks.desktop.AddOrderGUI" />
       <module name="main" />
@@ -224,15 +108,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MainMenuGUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="MainMenuGUI (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="frameworks.desktop.MainMenuGUI" />
-      <module name="fashionTFO" />
+      <module name="main" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="frameworks.desktop.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AddOrderUseCaseTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="fashionTFO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="fashionTFO" />
+      <option name="MAIN_CLASS_NAME" value="fashionTFO.AddOrderUseCaseTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in fashionTFO" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="fashionTFO" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -249,14 +156,18 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.MainMenuGUI (1)" />
       <item itemvalue="Application.AddOrderGUI" />
       <item itemvalue="Application.ListOrdersGUI" />
-      <item itemvalue="Application.MainMenuGUI" />
+      <item itemvalue="JUnit.AddOrderUseCaseTest" />
+      <item itemvalue="JUnit.All in fashionTFO" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.All in fashionTFO" />
+        <item itemvalue="JUnit.AddOrderUseCaseTest" />
+        <item itemvalue="Application.MainMenuGUI (1)" />
         <item itemvalue="Application.AddOrderGUI" />
-        <item itemvalue="Application.MainMenuGUI" />
         <item itemvalue="Application.ListOrdersGUI" />
       </list>
     </recent_temporary>
@@ -279,7 +190,11 @@
       <workItem from="1762762702240" duration="181000" />
       <workItem from="1762762988194" duration="7052000" />
       <workItem from="1763266583111" duration="5136000" />
-      <workItem from="1763272860600" duration="9594000" />
+      <workItem from="1763272860600" duration="11289000" />
+      <workItem from="1763626098309" duration="7000" />
+      <workItem from="1765163825609" duration="732000" />
+      <workItem from="1765181819604" duration="4101000" />
+      <workItem from="1765697727229" duration="2235000" />
     </task>
     <servers />
   </component>
