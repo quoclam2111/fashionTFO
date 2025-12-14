@@ -310,7 +310,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" onclick="alert('Chức năng đang phát triển'); return false;">
+                <a href="${pageContext.request.contextPath}/admin/orders">
                     <span class="icon">🛒</span>
                     Quản lý đơn hàng
                 </a>

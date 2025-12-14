@@ -1,4 +1,4 @@
-package adapter.payment;
+package adapters.payment;
 
 import payment.createorder.CreateOrderInput;
 import payment.createorder.CreateOrderPaymentUseCase;

@@ -7,6 +7,8 @@
             currentPage = "users";
         } else if (uri.contains("products")) {
             currentPage = "products";
+        } else if (uri.contains("orders")) {
+            currentPage = "orders";
         } else if (uri.contains("dashboard")) {
             currentPage = "dashboard";
         }
@@ -77,6 +79,7 @@
         .sidebar {
             width: 0;
             padding: 0;
+            overflow: hidden;
         }
     }
 </style>
@@ -110,7 +113,8 @@
             </a>
         </li>
         <li>
-            <a href="#" onclick="alert('Chức năng đang phát triển'); return false;">
+            <a href="${pageContext.request.contextPath}/admin/orders"
+               class="<%= "orders".equals(currentPage) ? "active" : "" %>">
                 <span class="icon">🛒</span>
                 Quản lý đơn hàng
             </a>

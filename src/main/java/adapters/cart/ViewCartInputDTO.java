@@ -1,6 +1,5 @@
 package adapters.cart;
 
-
 public class ViewCartInputDTO {
     private final int userId;
 

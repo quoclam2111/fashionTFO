@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import pay.entity.Order;
+import entity.Order;
 
 public class InMemoryOrderRepository implements OrderPaymentRepository {
     private final Map<UUID, Order> store = new ConcurrentHashMap<>();

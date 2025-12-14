@@ -1,7 +1,7 @@
 package adapters.cart;
 
-import cart.ViewCartInputBoundary;
-import cart.ViewCartInputData;
+import quanlycart.ViewCartInputBoundary;
+import quanlycart.ViewCartInputData;
 
 public class ViewCartController {
     private final ViewCartInputBoundary useCase;

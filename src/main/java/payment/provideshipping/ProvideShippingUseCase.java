@@ -1,6 +1,6 @@
 package payment.provideshipping;
 
-import pay.entity.Order;
+import entity.Order;
 import repository.DTO.ResultPaymentDTO;
 import repository.payment.OrderPaymentRepository;
 

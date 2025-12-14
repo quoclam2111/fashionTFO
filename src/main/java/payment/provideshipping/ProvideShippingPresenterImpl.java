@@ -1,11 +1,12 @@
 package payment.provideshipping;
 
-import repository.Publisher;
+
 import repository.DTO.ResultPaymentDTO;
+import repository.payment.Publisher;
 
 import java.util.List;
 
-import adapter.payment.provideshipping.ProvideShippingViewModel;
+import adapters.payment.provideshipping.ProvideShippingViewModel;
 
 public class ProvideShippingPresenterImpl implements ProvideShippingPresenter {
     private final Publisher<ProvideShippingViewModel> publisher;

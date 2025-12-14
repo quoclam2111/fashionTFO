@@ -37,7 +37,7 @@ public class ViewCartGUI extends JFrame {
         ViewCartViewModel viewModel = new ViewCartViewModel();
         ViewCartPresenter presenter = new ViewCartPresenter(viewModel);
         repository.jdbc.CartRepositoryImpl repo = new repository.jdbc.CartRepositoryImpl();
-        cart.ViewCartUseCase useCase = new cart.ViewCartUseCase(repo, presenter);
+        quanlycart.ViewCartUseCase useCase = new quanlycart.ViewCartUseCase(repo, presenter);
         ViewCartController controller = new ViewCartController(useCase);
         ViewCartPublisher publisher = new ViewCartPublisher(viewModel);
 

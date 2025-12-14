@@ -1,9 +1,10 @@
 package payment.processpayment;
 
-import application.port.PaymentGateway;
-import pay.entity.Order;
-import pay.entity.PaymentMethod;
+//import application.port.PaymentGateway;
+import entity.Order;
+import entity.PaymentMethod;
 import repository.payment.OrderPaymentRepository;
+import repository.payment.PaymentGateway;
 
 import java.util.Optional;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package repository;
+package repository.payment;
 
 import javax.swing.SwingUtilities;
 

@@ -1,4 +1,4 @@
-package adapter.payment.processpayment;
+package adapters.payment.processpayment;
 
 import java.util.List;
 

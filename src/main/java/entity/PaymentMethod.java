@@ -1,4 +1,4 @@
-package pay.entity;
+package entity;
 
 public class PaymentMethod {
     private final String code;

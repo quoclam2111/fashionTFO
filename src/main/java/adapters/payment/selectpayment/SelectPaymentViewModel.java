@@ -1,4 +1,4 @@
-package adapter.payment.selectpayment;
+package adapters.payment.selectpayment;
 
 import java.util.List;
 

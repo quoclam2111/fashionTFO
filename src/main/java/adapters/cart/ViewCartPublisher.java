@@ -1,8 +1,9 @@
 package adapters.cart;
 
-import cart.ViewCartOutputData;
 import java.util.List;
 import javax.swing.*;
+
+import quanlycart.ViewCartOutputData;
 
 public class ViewCartPublisher {
     private final ViewCartViewModel viewModel;

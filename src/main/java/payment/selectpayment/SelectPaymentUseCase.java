@@ -1,7 +1,7 @@
 package payment.selectpayment;
 
-import pay.entity.Order;
-import pay.entity.PaymentMethod;
+import entity.Order;
+import entity.PaymentMethod;
 import repository.DTO.ResultPaymentDTO;
 import repository.payment.OrderPaymentRepository;
 
