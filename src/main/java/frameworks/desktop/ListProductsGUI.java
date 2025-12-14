@@ -1,9 +1,6 @@
 package frameworks.desktop;
 
-import adapters.sanpham.list.ListProductController;
-import adapters.sanpham.list.ListProductInputDTO;
-import adapters.sanpham.list.ListProductPresenter;
-import adapters.sanpham.list.ListProductViewModel;
+import adapters.sanpham.list.*;
 import quanlysanpham.list.ProductListUseCase;
 import repository.jdbc.SanPhamRepositoryImpl;
 
@@ -34,33 +31,88 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Main panel with light background
+        initializeComponents();
+        loadProducts();
+        
+        setVisible(true);
+    }
+
+    private void initializeComponents() {
+        // Main panel
         JPanel mainPanel = new JPanel(new BorderLayout(0, 10));
         mainPanel.setBackground(new Color(245, 245, 245));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // Title Panel
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        titlePanel.setBackground(new Color(245, 245, 245));
-        JCheckBox chkSelectAll = new JCheckBox();
+        JPanel titlePanel = createTitlePanel();
+        
+        // Filter and Search Container
+        JPanel filterSearchPanel = createFilterSearchPanel();
+
+        // Table Panel
+        JPanel tablePanel = createTablePanel();
+
+        // Action Buttons Panel
+        JPanel actionPanel = createActionPanel();
+
+        // Assemble layout
+        JPanel topSection = new JPanel(new BorderLayout(0, 10));
+        topSection.setBackground(new Color(245, 245, 245));
+        topSection.add(titlePanel, BorderLayout.NORTH);
+        topSection.add(filterSearchPanel, BorderLayout.CENTER);
+
+        mainPanel.add(topSection, BorderLayout.NORTH);
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        mainPanel.add(actionPanel, BorderLayout.SOUTH);
+
+        add(mainPanel);
+
+        // Events
+        btnLoad.addActionListener(e -> loadProducts());
+        btnAdd.addActionListener(e -> addNewProduct());
+        btnEdit.addActionListener(e -> editSelectedProduct());
+        btnDelete.addActionListener(e -> deleteSelectedProduct());
+        btnView.addActionListener(e -> viewSelectedProduct());
+        btnSearch.addActionListener(e -> searchProducts());
+        btnClearSearch.addActionListener(e -> clearSearch());
+    }
+
+    private JPanel createTitlePanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        panel.setBackground(new Color(245, 245, 245));
+        
         JLabel lblTitle = new JLabel("QUẢN LÝ SẢN PHẨM");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
         lblTitle.setForeground(new Color(50, 50, 50));
-        titlePanel.add(chkSelectAll);
-        titlePanel.add(lblTitle);
+        panel.add(lblTitle);
+        
+        return panel;
+    }
 
-        // Filter and Search Container Panel
-        JPanel filterSearchPanel = new JPanel(new BorderLayout(0, 0));
-        filterSearchPanel.setBackground(Color.WHITE);
-        filterSearchPanel.setBorder(BorderFactory.createCompoundBorder(
+    private JPanel createFilterSearchPanel() {
+        JPanel panel = new JPanel(new BorderLayout(0, 0));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
 
         // Left Panel - Filter & Sort
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setBackground(Color.WHITE);
+        JPanel leftPanel = createFilterPanel();
+
+        // Right Panel - Search
+        JPanel rightPanel = createSearchPanel();
+
+        panel.add(leftPanel, BorderLayout.WEST);
+        panel.add(rightPanel, BorderLayout.EAST);
+
+        return panel;
+    }
+
+    private JPanel createFilterPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
 
         JLabel lblFilter = new JLabel("Bộ Lọc & Sắp Xếp");
         lblFilter.setFont(new Font("Arial", Font.BOLD, 13));
@@ -95,14 +147,17 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         btnLoad.setBorderPainted(false);
         filterControls.add(btnLoad);
 
-        leftPanel.add(lblFilter);
-        leftPanel.add(Box.createVerticalStrut(8));
-        leftPanel.add(filterControls);
+        panel.add(lblFilter);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(filterControls);
 
-        // Right Panel - Search
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBackground(Color.WHITE);
+        return panel;
+    }
+
+    private JPanel createSearchPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.WHITE);
 
         JLabel lblSearch = new JLabel("Tìm Kiếm");
         lblSearch.setFont(new Font("Arial", Font.BOLD, 13));
@@ -120,7 +175,7 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         txtSearch.setPreferredSize(new Dimension(260, 28));
         searchControls.add(txtSearch);
 
-        btnSearch = new JButton("☐");
+        btnSearch = new JButton("🔍");
         btnSearch.setBackground(new Color(40, 167, 69));
         btnSearch.setForeground(Color.WHITE);
         btnSearch.setFont(new Font("Arial", Font.BOLD, 14));
@@ -129,7 +184,7 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         btnSearch.setBorderPainted(false);
         searchControls.add(btnSearch);
 
-        btnClearSearch = new JButton("☐");
+        btnClearSearch = new JButton("✖");
         btnClearSearch.setBackground(new Color(108, 117, 125));
         btnClearSearch.setForeground(Color.WHITE);
         btnClearSearch.setFont(new Font("Arial", Font.BOLD, 14));
@@ -138,28 +193,30 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         btnClearSearch.setBorderPainted(false);
         searchControls.add(btnClearSearch);
 
-        rightPanel.add(lblSearch);
-        rightPanel.add(Box.createVerticalStrut(8));
-        rightPanel.add(searchControls);
+        panel.add(lblSearch);
+        panel.add(Box.createVerticalStrut(8));
+        panel.add(searchControls);
 
-        filterSearchPanel.add(leftPanel, BorderLayout.WEST);
-        filterSearchPanel.add(rightPanel, BorderLayout.EAST);
+        return panel;
+    }
 
-        // Table Panel
-        JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBackground(Color.WHITE);
-        tablePanel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220), 1));
+    private JPanel createTablePanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220), 1));
 
         String[] columns = {
                 "ID", "Tên Sản Phẩm", "Slug", "Mô Tả", "Brand ID", "Category ID",
                 "Hình Ảnh", "Giá", "Giá Giảm", "Số Lượng", "Trạng Thái", "Ngày Tạo", "Ngày Cập Nhật"
         };
+        
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+        
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(35);
@@ -168,7 +225,6 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         table.setSelectionBackground(new Color(232, 240, 254));
         table.setSelectionForeground(Color.BLACK);
 
-        // Customize table header
         JTableHeader header = table.getTableHeader();
         header.setBackground(new Color(52, 58, 64));
         header.setForeground(Color.WHITE);
@@ -177,60 +233,40 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Action Buttons Panel
-        JPanel actionPanel = new JPanel(new BorderLayout());
-        actionPanel.setBackground(Color.WHITE);
-        actionPanel.setBorder(BorderFactory.createCompoundBorder(
+        return panel;
+    }
+
+    private JPanel createActionPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
 
         JLabel lblActions = new JLabel("Chức Năng");
         lblActions.setFont(new Font("Arial", Font.BOLD, 13));
-        actionPanel.add(lblActions, BorderLayout.NORTH);
+        panel.add(lblActions, BorderLayout.NORTH);
 
-        // Buttons container with GridLayout for equal sizing
         JPanel buttonsContainer = new JPanel(new GridLayout(1, 4, 15, 0));
         buttonsContainer.setBackground(Color.WHITE);
         buttonsContainer.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        btnAdd = createActionButton("☐ Thêm Mới", new Color(40, 167, 69));
-        btnView = createActionButton("☐ Xem Chi Tiết", new Color(0, 123, 255));
-        btnEdit = createActionButton("☐ Cập Nhật", new Color(255, 193, 7));
-        btnDelete = createActionButton("☐ Xóa", new Color(220, 53, 69));
+        btnAdd = createActionButton("➕ Thêm Mới", new Color(40, 167, 69));
+        btnView = createActionButton("👁️ Xem Chi Tiết", new Color(0, 123, 255));
+        btnEdit = createActionButton("✏️ Cập Nhật", new Color(255, 193, 7));
+        btnDelete = createActionButton("🗑️ Xóa", new Color(220, 53, 69));
 
         buttonsContainer.add(btnAdd);
         buttonsContainer.add(btnView);
         buttonsContainer.add(btnEdit);
         buttonsContainer.add(btnDelete);
 
-        actionPanel.add(buttonsContainer, BorderLayout.CENTER);
+        panel.add(buttonsContainer, BorderLayout.CENTER);
 
-        // Assemble main layout
-        JPanel topSection = new JPanel(new BorderLayout(0, 10));
-        topSection.setBackground(new Color(245, 245, 245));
-        topSection.add(titlePanel, BorderLayout.NORTH);
-        topSection.add(filterSearchPanel, BorderLayout.CENTER);
-
-        mainPanel.add(topSection, BorderLayout.NORTH);
-        mainPanel.add(tablePanel, BorderLayout.CENTER);
-        mainPanel.add(actionPanel, BorderLayout.SOUTH);
-
-        add(mainPanel);
-
-        // Events
-        btnLoad.addActionListener(e -> loadProducts());
-        btnAdd.addActionListener(e -> addNewProduct());
-        btnEdit.addActionListener(e -> editSelectedProduct());
-        btnDelete.addActionListener(e -> deleteSelectedProduct());
-        btnView.addActionListener(e -> viewSelectedProduct());
-        btnSearch.addActionListener(e -> searchProducts());
-        btnClearSearch.addActionListener(e -> clearSearch());
-
-        setVisible(true);
-        loadProducts();
+        return panel;
     }
 
     private JButton createActionButton(String text, Color bgColor) {
@@ -243,7 +279,6 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setPreferredSize(new Dimension(200, 45));
 
-        // Hover effect
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn.setBackground(bgColor.darker());
@@ -260,69 +295,40 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         try {
             System.out.println("=== BẮT ĐẦU LOAD PRODUCTS ===");
 
-            // Create DTO with filter/sort parameters
             ListProductInputDTO dto = new ListProductInputDTO();
             dto.statusFilter = (String) cmbStatus.getSelectedItem();
             dto.sortBy = (String) cmbSort.getSelectedItem();
             dto.ascending = chkAscending.isSelected();
 
-            System.out.println("DTO - Status: " + dto.statusFilter + ", SortBy: " + dto.sortBy + ", Ascending: " + dto.ascending);
-
-            // Create ViewModel
             ListProductViewModel model = new ListProductViewModel();
-
-            // Create Presenter with the ViewModel
             ListProductPresenter presenter = new ListProductPresenter(model);
-
-            // Create Repository
             SanPhamRepositoryImpl repo = new SanPhamRepositoryImpl();
-
-            // Create Use Case
             ProductListUseCase useCase = new ProductListUseCase(repo, presenter);
-
-            // Create Controller
             ListProductController controller = new ListProductController(useCase);
 
-            // Execute the controller
             controller.execute(dto);
 
-            System.out.println("Model Success: " + model.success);
-            System.out.println("Model Message: " + model.message);
-            System.out.println("Products count: " + (model.products != null ? model.products.size() : "null"));
-
-            // Update UI with results
             if (model.success) {
                 tableModel.setRowCount(0);
                 if (model.products != null && !model.products.isEmpty()) {
                     for (var p : model.products) {
                         tableModel.addRow(new Object[]{
-                                p.productId,
-                                p.productName,
-                                p.slug,
-                                p.description,
-                                p.brandId,
-                                p.categoryId,
-                                p.defaultImage,
-                                p.price,
-                                p.discountPrice,
-                                p.stockQuantity,
-                                p.status,
-                                p.createdAt,
-                                p.updatedAt
+                                p.productId, p.productName, p.slug, p.description,
+                                p.brandId, p.categoryId, p.defaultImage,
+                                p.price, p.discountPrice, p.stockQuantity,
+                                p.status, p.createdAt, p.updatedAt
                         });
                     }
                     setTitle("Quản Lý Sản Phẩm (" + model.filteredCount + "/" + model.totalCount + " sản phẩm)");
                     System.out.println("✓ Đã load " + model.products.size() + " sản phẩm thành công!");
                 } else {
                     setTitle("Quản Lý Sản Phẩm (0/0 sản phẩm)");
-                    System.out.println("⚠ Không có sản phẩm nào!");
                     JOptionPane.showMessageDialog(this,
                             "Không có sản phẩm nào trong hệ thống!",
                             "Thông báo",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
-                System.err.println("✗ Lỗi: " + model.message);
                 JOptionPane.showMessageDialog(this,
                         "Lỗi: " + model.message,
                         "Lỗi",
@@ -330,10 +336,9 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
             }
 
         } catch (Exception ex) {
-            System.err.println("✗ EXCEPTION: " + ex.getMessage());
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this,
-                    "Lỗi khi tải danh sách sản phẩm:\n" + ex.getMessage() + "\n\nChi tiết: " + ex.getClass().getName(),
+                    "Lỗi khi tải danh sách sản phẩm:\n" + ex.getMessage(),
                     "Lỗi",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -343,16 +348,12 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
 
     private void searchProducts() {
         String searchValue = txtSearch.getText().trim();
-
         if (searchValue.isEmpty()) {
-            // Nếu ô tìm kiếm rỗng → load tất cả
             loadProducts();
             return;
         }
 
         String searchField = (String) cmbSearchField.getSelectedItem();
-
-        // ✅ XÓA DỮ LIỆU CŨ VÀ LỌC TRỰC TIẾP TRÊN tableModel
         int columnIndex;
         switch (searchField) {
             case "productName": columnIndex = 1; break;
@@ -362,27 +363,15 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
             default: columnIndex = 1;
         }
 
-        // Lưu tất cả dữ liệu trước khi lọc
         java.util.List<Object[]> allData = new java.util.ArrayList<>();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            allData.add(new Object[]{
-                    tableModel.getValueAt(i, 0),   // productId
-                    tableModel.getValueAt(i, 1),   // productName
-                    tableModel.getValueAt(i, 2),   // slug
-                    tableModel.getValueAt(i, 3),   // description
-                    tableModel.getValueAt(i, 4),   // brandId
-                    tableModel.getValueAt(i, 5),   // categoryId
-                    tableModel.getValueAt(i, 6),   // defaultImage
-                    tableModel.getValueAt(i, 7),   // price
-                    tableModel.getValueAt(i, 8),   // discountPrice
-                    tableModel.getValueAt(i, 9),   // stockQuantity
-                    tableModel.getValueAt(i, 10),  // status
-                    tableModel.getValueAt(i, 11),  // createdAt
-                    tableModel.getValueAt(i, 12)   // updatedAt
-            });
+            Object[] row = new Object[13];
+            for (int j = 0; j < 13; j++) {
+                row[j] = tableModel.getValueAt(i, j);
+            }
+            allData.add(row);
         }
 
-        // Xóa bảng và thêm lại dữ liệu đã lọc
         tableModel.setRowCount(0);
         int count = 0;
 
@@ -439,7 +428,6 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         }
 
         String productId = (String) tableModel.getValueAt(selectedRow, 0);
-        // ⭐ MỞ DIALOG XEM CHI TIẾT
         new ViewProductGUI(productId);
     }
 
@@ -447,7 +435,7 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this,
-                    "Vui lòng chọn một sản phẩm từ danh sách để xóa!",
+                    "Vui lòng chọn một sản phẩm để xóa!",
                     "Thông Báo",
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -455,13 +443,11 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
 
         String productId = (String) tableModel.getValueAt(selectedRow, 0);
         String productName = (String) tableModel.getValueAt(selectedRow, 1);
-        String slug = (String) tableModel.getValueAt(selectedRow, 2);
 
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Bạn có chắc chắn muốn xóa sản phẩm?\n\n" +
                         "Mã: " + productId + "\n" +
-                        "Tên: " + productName + "\n" +
-                        "Slug: " + slug + "\n\n" +
+                        "Tên: " + productName + "\n\n" +
                         "Hành động này không thể hoàn tác!",
                 "Xác Nhận Xóa",
                 JOptionPane.YES_NO_OPTION,
@@ -471,43 +457,9 @@ public class ListProductsGUI extends JFrame implements ProductUpdateListener {
             return;
         }
 
-        try {
-            adapters.sanpham.delete.DeleteProductInputDTO input = new adapters.sanpham.delete.DeleteProductInputDTO();
-            input.productId = productId;
-
-            adapters.sanpham.delete.DeleteProductViewModel viewModel = new adapters.sanpham.delete.DeleteProductViewModel();
-            adapters.sanpham.delete.DeleteProductPresenter presenter = new adapters.sanpham.delete.DeleteProductPresenter(viewModel);
-
-            SanPhamRepositoryImpl repository = new SanPhamRepositoryImpl();
-            quanlysanpham.delete.DeleteProductUseCase useCase =
-                    new quanlysanpham.delete.DeleteProductUseCase(repository, presenter);
-
-            adapters.sanpham.delete.DeleteProductController controller =
-                    new adapters.sanpham.delete.DeleteProductController(useCase);
-
-            controller.execute(input);
-
-            if (viewModel.success) {
-                JOptionPane.showMessageDialog(this,
-                        "Xóa sản phẩm thành công!\n" +
-                                "Sản phẩm: " + viewModel.deleteProductName,
-                        "Thành Công",
-                        JOptionPane.INFORMATION_MESSAGE);
-                loadProducts();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        viewModel.message,
-                        "Lỗi",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Lỗi khi xóa: " + ex.getMessage(),
-                    "Lỗi",
-                    JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
+        DeleteProductGUI deleteGUI = new DeleteProductGUI(this);
+        deleteGUI.setProductId(productId);
+        deleteGUI.setVisible(true);
     }
 
     @Override

@@ -1,27 +1,62 @@
 package frameworks.desktop;
 
-import adapters.sanpham.add.AddProductController;
-import adapters.sanpham.add.AddProductInputDTO;
-import adapters.sanpham.add.AddProductPresenter;
-import adapters.sanpham.add.AddProductViewModel;
-import quanlysanpham.ProductManageControl;
-import quanlysanpham.add.AddProductUseCase;
+import adapters.sanpham.add.*;
+import quanlysanpham.add.*;
 import repository.jdbc.SanPhamRepositoryImpl;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AddProductUi extends JFrame {
+public class AddProductUi extends JFrame implements Subscriber {
     private JTextField txtProductName, txtDescription, txtBrandId, txtCategoryId,
-            txtDefaultImage, txtPrice, txtDiscountPrice, txtStockQuantity, txtStatus;
+            txtDefaultImage, txtPrice, txtDiscountPrice, txtStockQuantity;
     private JButton btnAdd, btnCancel;
     private ProductUpdateListener listener;
+    private AddProductViewModel addModel;
+    private AddProductPublisher addPublisher;
 
     public AddProductUi(ProductUpdateListener listener) {
         this.listener = listener;
+        
+        // ⭐ Khởi tạo OpenForm trước
+        initializeOpenForm();
+        
+        // Sau đó khởi tạo UI
+        initializeUI();
+        
+        // Setup Add Product MVC
+        setupAddProductMVC();
+    }
 
+    /**
+     * ⭐ Gọi OpenForm Use Case để chuẩn bị form
+     */
+    private void initializeOpenForm() {
+        OpenAddProductFormViewModel openModel = new OpenAddProductFormViewModel();
+        OpenAddProductFormPresenter openPresenter = new OpenAddProductFormPresenter(openModel);
+        OpenAddProductFormUseCase openUseCase = new OpenAddProductFormUseCase(openPresenter);
+        OpenAddProductFormController openController = new OpenAddProductFormController(openUseCase);
+        
+        // Gọi openForm
+        openController.openForm();
+        
+        // Kiểm tra kết quả
+        if (openModel.success) {
+            System.out.println("✅ " + openModel.message);
+        } else {
+            System.err.println("❌ " + openModel.message);
+        }
+    }
+
+    private void setupAddProductMVC() {
+        addModel = new AddProductViewModel();
+        addPublisher = new AddProductPublisher();
+        addPublisher.addSubscriber(this);
+    }
+
+    private void initializeUI() {
         setTitle("Thêm sản phẩm");
-        setSize(500, 500);
+        setSize(500, 550);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -42,6 +77,7 @@ public class AddProductUi extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
+        // Tạo các field
         JLabel lblProductName = new JLabel("Tên sản phẩm:");
         txtProductName = new JTextField(20);
         JLabel lblDescription = new JLabel("Mô tả:");
@@ -111,8 +147,7 @@ public class AddProductUi extends JFrame {
         dto.discountPrice = txtDiscountPrice.getText();
         dto.stockQuantity = txtStockQuantity.getText();
 
-        AddProductViewModel model = new AddProductViewModel();
-        AddProductPresenter presenter = new AddProductPresenter(model);
+        AddProductPresenter presenter = new AddProductPresenter(addModel);
 
         SanPhamRepositoryImpl repo = new SanPhamRepositoryImpl();
         AddProductUseCase uc = new AddProductUseCase(repo, presenter);
@@ -121,26 +156,33 @@ public class AddProductUi extends JFrame {
 
         try {
             controller.execute(dto);
+            
+            // Notify để update UI
+            addPublisher.notifySubscribers();
 
-            if(model.success) {
-                JOptionPane.showMessageDialog(this,
-                        model.message + "\nID sản phẩm: " + model.productId,
-                        "Thành công",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-                // Thông báo cho listener để refresh danh sách
-                if (listener != null) {
-                    listener.onProductUpdated();
-                }
-
-                // Đóng form sau khi thêm thành công
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, model.message,
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
         } catch(Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    @Override
+    public void update() {
+        if(addModel.success) {
+            JOptionPane.showMessageDialog(this,
+                    addModel.message + "\nID sản phẩm: " + addModel.productId,
+                    "Thành công",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            // Thông báo cho listener để refresh danh sách
+            if (listener != null) {
+                listener.onProductUpdated();
+            }
+
+            // Đóng form sau khi thêm thành công
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, addModel.message,
                     "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
