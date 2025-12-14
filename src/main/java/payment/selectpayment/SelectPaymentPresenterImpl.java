@@ -1,11 +1,11 @@
 package payment.selectpayment;
 
-import repository.Publisher;
+import repository.payment.Publisher;
 import repository.DTO.ResultPaymentDTO;
 
 import java.util.List;
 
-import adapter.payment.selectpayment.SelectPaymentViewModel;
+import adapters.payment.selectpayment.SelectPaymentViewModel;
 
 public class SelectPaymentPresenterImpl implements SelectPaymentPresenter {
 

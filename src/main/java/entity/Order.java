@@ -1,4 +1,4 @@
-package pay.entity;
+package entity;
 
 import java.util.List;
 import java.util.UUID;

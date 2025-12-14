@@ -1,8 +1,8 @@
 package payment.processpayment;
 
 import application.port.PaymentGateway;
-import pay.entity.Order;
-import pay.entity.PaymentMethod;
+import entity.Order;
+import entity.PaymentMethod;
 import repository.payment.OrderPaymentRepository;
 
 import java.util.Optional;
