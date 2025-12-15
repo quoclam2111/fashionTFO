@@ -392,13 +392,13 @@
                     <p>Xem, thêm, sửa, xóa người dùng trong hệ thống</p>
                 </div>
 
-                <div class="action-card" onclick="alert('Chức năng đang được phát triển')">
+                <div class="action-card" onclick="location.href='${pageContext.request.contextPath}/admin/products'">
                     <div class="icon">📦</div>
                     <h3>Quản lý sản phẩm</h3>
                     <p>Quản lý danh mục và sản phẩm thời trang</p>
                 </div>
 
-                <div class="action-card" onclick="alert('Chức năng đang được phát triển')">
+                <div class="action-card" onclick="location.href='${pageContext.request.contextPath}/admin/orders'">
                     <div class="icon">🛒</div>
                     <h3>Quản lý đơn hàng</h3>
                     <p>Xử lý và theo dõi các đơn hàng</p>
