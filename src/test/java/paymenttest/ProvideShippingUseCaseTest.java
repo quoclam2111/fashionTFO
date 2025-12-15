@@ -1,7 +1,7 @@
 package paymenttest;
 
-import pay.entity.Order;
-import pay.entity.OrderItem;
+import entity.Order;
+import entity.OrderItem;
 import payment.provideshipping.ProvideShippingOutputModel;
 import payment.provideshipping.ProvideShippingPresenter;
 import payment.provideshipping.ProvideShippingUseCase;

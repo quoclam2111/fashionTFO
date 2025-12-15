@@ -1,8 +1,8 @@
 package paymenttest;
 
-import pay.entity.Order;
-import pay.entity.OrderItem;
-import pay.entity.PaymentMethod;
+import entity.Order;
+import entity.OrderItem;
+import entity.PaymentMethod;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

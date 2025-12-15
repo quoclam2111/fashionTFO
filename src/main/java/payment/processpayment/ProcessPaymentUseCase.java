@@ -1,6 +1,6 @@
 package payment.processpayment;
 
-import application.port.PaymentGateway;
+import repository.payment.PaymentGateway;
 import entity.Order;
 import entity.PaymentMethod;
 import repository.payment.OrderPaymentRepository;

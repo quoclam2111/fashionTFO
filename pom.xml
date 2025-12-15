@@ -30,7 +30,7 @@
 
     <dependency>
       <groupId>com.nql</groupId>
-      <artifactId>du_an_fashionTFO</artifactId>
+      <artifactId>fashionTFO</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 

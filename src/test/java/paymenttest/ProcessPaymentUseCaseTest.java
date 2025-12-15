@@ -1,9 +1,9 @@
 package paymenttest;
 
-import application.port.PaymentGateway;
-import pay.entity.Order;
-import pay.entity.OrderItem;
-import pay.entity.PaymentMethod;
+import repository.payment.PaymentGateway;
+import entity.Order;
+import entity.OrderItem;
+import entity.PaymentMethod;
 import payment.processpayment.ProcessPaymentInput;
 import payment.processpayment.ProcessPaymentOutputModel;
 import payment.processpayment.ProcessPaymentPresenter;
@@ -14,10 +14,6 @@ import repository.payment.OrderPaymentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,22 +21,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayName("UC4: Thanh toán")
 class ProcessPaymentUseCaseTest {
 
-    @Mock private OrderPaymentRepository orderRepo;
-    @Mock private PaymentGateway gateway;
-    @Mock private ProcessPaymentPresenter presenter;
-
+    private FakeOrderPaymentRepository orderRepo;
+    private FakePaymentGateway gateway;
+    private TestProcessPaymentPresenter presenter;
     private ProcessPaymentUseCase useCase;
 
     @BeforeEach
     void setUp() {
+        orderRepo = new FakeOrderPaymentRepository();
+        gateway = new FakePaymentGateway();
+        presenter = new TestProcessPaymentPresenter();
         useCase = new ProcessPaymentUseCase(orderRepo, gateway, presenter);
     }
 
@@ -51,18 +45,14 @@ class ProcessPaymentUseCaseTest {
 
         Order order = new Order(orderId, items);
         order.calculateItemTotal();
-
-        // ✅ FIX CHUẨN: dùng constructor thật của domain
-        // baseFee = 25000, perKmFee = 0  → luôn ra 25.000
         order.calculateShippingFee(
             new ShippingFeeCalculator(25000, 0),
             10
         );
-
         order.calculateFinalAmount();
         return order;
     }
-    // Kịch bản 1: User chọn thanh toán bằng "COD"
+
     @Test
     @DisplayName("Kịch bản 1: Thanh toán COD thành công - không gọi gateway")
     void shouldProcessCODPayment_WithoutCallingGateway() {
@@ -70,24 +60,20 @@ class ProcessPaymentUseCaseTest {
         ProcessPaymentInput input = new ProcessPaymentInput(orderId.toString());
         Order order = createTestOrder(orderId);
         order.setPaymentMethod(new PaymentMethod("COD"));
-        when(orderRepo.findById(orderId)).thenReturn(Optional.of(order));
+        orderRepo.addOrder(orderId, order);
 
         useCase.execute(input);
 
-        ArgumentCaptor<ProcessPaymentOutputModel> captor =
-            ArgumentCaptor.forClass(ProcessPaymentOutputModel.class);
-        verify(presenter).present(captor.capture());
-        ProcessPaymentOutputModel output = captor.getValue();
-
+        ProcessPaymentOutputModel output = presenter.getLastOutput();
+        assertNotNull(output);
         assertTrue(output.needGatewayRedirect);
         assertNull(output.gatewayInfo);
         assertTrue(output.message.contains("COD"));
         assertEquals(orderId.toString(), output.orderId);
 
-        verify(gateway, never()).requestPayment(any(), anyInt());
+        assertFalse(gateway.wasRequestPaymentCalled());
     }
 
-    // Kịch bản 2: User chọn thanh toán bằng "BANKING_QR"
     @Test
     @DisplayName("Kịch bản 2: Thanh toán BANKING_QR - gọi payment gateway")
     void shouldProcessBankingPayment_WithGatewayCall() {
@@ -95,19 +81,17 @@ class ProcessPaymentUseCaseTest {
         ProcessPaymentInput input = new ProcessPaymentInput(orderId.toString());
         Order order = createTestOrder(orderId);
         order.setPaymentMethod(new PaymentMethod("BANKING_QR"));
-        when(orderRepo.findById(orderId)).thenReturn(Optional.of(order));
-        when(gateway.requestPayment(orderId.toString(), order.getFinalAmount()))
-            .thenReturn("QR_CODE_STRING_12345");
+        orderRepo.addOrder(orderId, order);
+        gateway.setReturnValue("QR_CODE_STRING_12345");
 
         useCase.execute(input);
 
-        verify(gateway).requestPayment(orderId.toString(), order.getFinalAmount());
+        assertTrue(gateway.wasRequestPaymentCalled());
+        assertEquals(orderId.toString(), gateway.getLastOrderId());
+        assertEquals(order.getFinalAmount(), gateway.getLastAmount());
 
-        ArgumentCaptor<ProcessPaymentOutputModel> captor =
-            ArgumentCaptor.forClass(ProcessPaymentOutputModel.class);
-        verify(presenter).present(captor.capture());
-        ProcessPaymentOutputModel output = captor.getValue();
-
+        ProcessPaymentOutputModel output = presenter.getLastOutput();
+        assertNotNull(output);
         assertTrue(output.needGatewayRedirect);
         assertEquals("QR_CODE_STRING_12345", output.gatewayInfo);
         assertTrue(output.message.contains("Payment initiated"));
@@ -121,13 +105,14 @@ class ProcessPaymentUseCaseTest {
         ProcessPaymentInput input = new ProcessPaymentInput(orderId.toString());
         Order order = createTestOrder(orderId);
         order.setPaymentMethod(new PaymentMethod("BANKING_QR"));
-        when(orderRepo.findById(orderId)).thenReturn(Optional.of(order));
-        when(gateway.requestPayment(anyString(), anyInt()))
-            .thenThrow(new RuntimeException("Gateway connection failed"));
+        orderRepo.addOrder(orderId, order);
+        gateway.setShouldFail(true);
 
         useCase.execute(input);
 
-        verify(presenter).presentError(contains("Payment gateway failed"));
+        String error = presenter.getLastError();
+        assertNotNull(error);
+        assertTrue(error.contains("Payment gateway failed"));
     }
 
     @Test
@@ -135,7 +120,7 @@ class ProcessPaymentUseCaseTest {
     void shouldPresentError_WhenOrderIdIsNull() {
         ProcessPaymentInput input = new ProcessPaymentInput(null);
         useCase.execute(input);
-        verify(presenter).presentError("orderId required");
+        assertEquals("orderId required", presenter.getLastError());
     }
 
     @Test
@@ -143,7 +128,7 @@ class ProcessPaymentUseCaseTest {
     void shouldPresentError_WhenOrderIdFormatInvalid() {
         ProcessPaymentInput input = new ProcessPaymentInput("invalid-uuid");
         useCase.execute(input);
-        verify(presenter).presentError("orderId invalid");
+        assertEquals("orderId invalid", presenter.getLastError());
     }
 
     @Test
@@ -151,11 +136,10 @@ class ProcessPaymentUseCaseTest {
     void shouldPresentError_WhenOrderNotFound() {
         UUID orderId = UUID.randomUUID();
         ProcessPaymentInput input = new ProcessPaymentInput(orderId.toString());
-        when(orderRepo.findById(orderId)).thenReturn(Optional.empty());
 
         useCase.execute(input);
 
-        verify(presenter).presentError("Order not found");
+        assertEquals("Order not found", presenter.getLastError());
     }
 
     @Test
@@ -164,10 +148,93 @@ class ProcessPaymentUseCaseTest {
         UUID orderId = UUID.randomUUID();
         ProcessPaymentInput input = new ProcessPaymentInput(orderId.toString());
         Order order = createTestOrder(orderId);
-        when(orderRepo.findById(orderId)).thenReturn(Optional.of(order));
+        orderRepo.addOrder(orderId, order);
 
         useCase.execute(input);
 
-        verify(presenter).presentError("Payment method not selected");
+        assertEquals("Payment method not selected", presenter.getLastError());
+    }
+
+    // Fake OrderPaymentRepository
+    static class FakeOrderPaymentRepository implements OrderPaymentRepository {
+        private java.util.Map<UUID, Order> orders = new java.util.HashMap<>();
+
+        void addOrder(UUID id, Order order) {
+            orders.put(id, order);
+        }
+
+        @Override
+        public void save(Order order) {
+            orders.put(order.getId(), order);
+        }
+
+        @Override
+        public Optional<Order> findById(UUID id) {
+            return Optional.ofNullable(orders.get(id));
+        }
+    }
+
+    // Fake PaymentGateway
+    static class FakePaymentGateway implements PaymentGateway {
+        private boolean requestPaymentCalled = false;
+        private String lastOrderId;
+        private int lastAmount;
+        private String returnValue;
+        private boolean shouldFail = false;
+
+        void setReturnValue(String value) {
+            this.returnValue = value;
+        }
+
+        void setShouldFail(boolean shouldFail) {
+            this.shouldFail = shouldFail;
+        }
+
+        @Override
+        public String requestPayment(String orderId, int amount) {
+            if (shouldFail) {
+                throw new RuntimeException("Gateway connection failed");
+            }
+            this.requestPaymentCalled = true;
+            this.lastOrderId = orderId;
+            this.lastAmount = amount;
+            return returnValue;
+        }
+
+        boolean wasRequestPaymentCalled() {
+            return requestPaymentCalled;
+        }
+
+        String getLastOrderId() {
+            return lastOrderId;
+        }
+
+        int getLastAmount() {
+            return lastAmount;
+        }
+    }
+
+    // Test Presenter
+    static class TestProcessPaymentPresenter implements ProcessPaymentPresenter {
+        private ProcessPaymentOutputModel lastOutput;
+        private String lastError;
+
+        @Override
+        public void present(ProcessPaymentOutputModel output) {
+            this.lastOutput = output;
+        }
+
+        @Override
+        public void presentError(String error) {
+            this.lastError = error;
+        }
+
+        ProcessPaymentOutputModel getLastOutput() {
+            return lastOutput;
+        }
+
+        String getLastError() {
+            return lastError;
+        }
     }
 }
