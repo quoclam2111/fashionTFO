@@ -1,6 +1,8 @@
 package frameworks.web.servlet;
 
 import java.io.IOException;
+import java.util.Optional;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +17,7 @@ import quanlydonhang.list.ListOrdersUseCase;
 import quanlydonhang.update.UpdateOrderUseCase;
 import quanlydonhang.delete.DeleteOrderUseCase;
 import repository.jdbc.OrderRepoImpl;
+import repository.DTO.OrderDTO;
 
 @WebServlet("/admin/orders")
 public class OrderManagementServlet extends HttpServlet {
@@ -27,9 +30,12 @@ public class OrderManagementServlet extends HttpServlet {
     private DeleteOrderController deleteController;
     private DeleteOrderViewModel deleteViewModel;
     
+    // Repository để get order detail
+    private OrderRepoImpl repository;
+    
     @Override
     public void init() throws ServletException {
-        OrderRepoImpl repository = new OrderRepoImpl();
+        repository = new OrderRepoImpl();
         
         // List orders
         listViewModel = new ListOrdersViewModel();
@@ -114,16 +120,58 @@ public class OrderManagementServlet extends HttpServlet {
     
     private void handleViewOrder(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        // TODO: Implement view order detail
-        response.sendRedirect(request.getContextPath() + "/admin/orders");
+        
+        String orderId = request.getParameter("id");
+        
+        if (orderId == null || orderId.trim().isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/admin/orders?error=Order ID không hợp lệ");
+            return;
+        }
+        
+        try {
+            // Lấy order từ database
+            Optional<OrderDTO> orderOpt = repository.findById(orderId);
+            
+            if (orderOpt.isPresent()) {
+                OrderDTO order = orderOpt.get();
+                request.setAttribute("order", order);
+                request.getRequestDispatcher("/WEB-INF/views/admin-order-detail.jsp").forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/admin/orders?error=Không tìm thấy đơn hàng");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/admin/orders?error=" + e.getMessage());
+        }
     }
     
     private void handleEditForm(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
         String orderId = request.getParameter("id");
-        request.setAttribute("orderId", orderId);
-        request.getRequestDispatcher("/WEB-INF/views/admin-order-edit.jsp").forward(request, response);
+        
+        if (orderId == null || orderId.trim().isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/admin/orders?error=Order ID không hợp lệ");
+            return;
+        }
+        
+        try {
+            // Lấy order từ database
+            Optional<OrderDTO> orderOpt = repository.findById(orderId);
+            
+            if (orderOpt.isPresent()) {
+                OrderDTO order = orderOpt.get();
+                request.setAttribute("order", order);
+                request.getRequestDispatcher("/WEB-INF/views/admin-order-edit.jsp").forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/admin/orders?error=Không tìm thấy đơn hàng");
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/admin/orders?error=" + e.getMessage());
+        }
     }
     
     private void handleUpdateOrder(HttpServletRequest request, HttpServletResponse response) 
@@ -135,14 +183,22 @@ public class OrderManagementServlet extends HttpServlet {
         dto.customerName = request.getParameter("customerName");
         dto.customerPhone = request.getParameter("customerPhone");
         dto.customerAddress = request.getParameter("customerAddress");
-        dto.totalAmount = Double.parseDouble(request.getParameter("totalAmount"));
+        
+        try {
+            dto.totalAmount = Double.parseDouble(request.getParameter("totalAmount"));
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Tổng tiền không hợp lệ!");
+            handleEditForm(request, response);
+            return;
+        }
+        
         dto.status = request.getParameter("status");
         dto.note = request.getParameter("note");
         
         updateController.execute(dto);
         
         if (updateViewModel.success) {
-            response.sendRedirect(request.getContextPath() + "/admin/orders?updated=true");
+            response.sendRedirect(request.getContextPath() + "/admin/orders?action=view&id=" + dto.orderId + "&updated=true");
         } else {
             request.setAttribute("error", updateViewModel.message);
             handleEditForm(request, response);
