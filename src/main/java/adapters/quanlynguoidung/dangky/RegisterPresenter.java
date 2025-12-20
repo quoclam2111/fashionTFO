@@ -5,8 +5,7 @@ import java.util.Date;
 
 import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
 import quanlynguoidung.QuanLyNguoiDungResponseData;
-
-import quanlynguoidung.dangky.ResponseDataRegister;
+import quanlynguoidung. dangky.ResponseDataRegister;
 
 public class RegisterPresenter implements QuanLyNguoiDungOutputBoundary {
     private RegisterViewModel model;
@@ -17,16 +16,18 @@ public class RegisterPresenter implements QuanLyNguoiDungOutputBoundary {
     
     @Override
     public void present(QuanLyNguoiDungResponseData res) {
-    	ResponseDataRegister registerRes = (ResponseDataRegister) res;
-        
-        if (registerRes.message != null) {
-            model.message = registerRes.message;
-        }
+        ResponseDataRegister registerRes = (ResponseDataRegister) res;
         
         model.success = registerRes.success;
+        model.message = registerRes.message;
         
         if (registerRes.registeredUserId != null) {
-            model.userId = registerRes.registeredUserId;
+            model. userId = registerRes.registeredUserId;
+        }
+        
+        // ⭐ THÊM DÒNG NÀY
+        if (registerRes.username != null) {
+            model.username = registerRes.username;
         }
         
         model.timestamp = converter(res.timestamp);
@@ -34,6 +35,6 @@ public class RegisterPresenter implements QuanLyNguoiDungOutputBoundary {
     
     private String converter(Date timestamp) {
         SimpleDateFormat converter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return converter.format(timestamp);
+        return converter. format(timestamp);
     }
 }

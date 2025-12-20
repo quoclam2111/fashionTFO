@@ -1,12 +1,8 @@
 package quanlynguoidung.dangnhap;
 
-import config.PasswordUtil;  // ⭐ Import
-import quanlynguoidung.User;
+import config. PasswordUtil;  // ⭐ Import
+import quanlynguoidung. User;
 
-/**
- * Entity cho Login Use Case
- * Chứa business logic validation cho đăng nhập
- */
 public class LoginUser extends User {
     private String role;
     private String accountType;
@@ -24,9 +20,6 @@ public class LoginUser extends User {
         this.accountType = accountType;
     }
     
-    /**
-     * Validate business rules cho login
-     */
     @Override
     public void validate() {
         if (username == null || username.trim().isEmpty()) {
@@ -37,7 +30,7 @@ public class LoginUser extends User {
             throw new IllegalArgumentException("Password không được để trống");
         }
         
-        if (username. length() < 3) {
+        if (username.length() < 3) {
             throw new IllegalArgumentException("Username phải có ít nhất 3 ký tự");
         }
         
@@ -46,41 +39,29 @@ public class LoginUser extends User {
         }
     }
     
-    /**
-     * Kiểm tra tài khoản có bị khóa không
-     */
     public boolean isLocked() {
         return "locked".equalsIgnoreCase(this.status);
     }
     
     /**
-     * ⭐ Kiểm tra password có khớp không - DÙNG BCRYPT
+     * ⭐ Verify password với BCrypt
      */
     public boolean verifyPassword(String inputPassword) {
         if (inputPassword == null) {
             return false;
         }
         // ⭐ So sánh password nhập vào với hash trong DB
-        return PasswordUtil.verifyPassword(inputPassword, this.password);
+        return PasswordUtil.verifyPassword(inputPassword, this. password);
     }
     
-    /**
-     * Kiểm tra có phải nhân viên không
-     */
     public boolean isEmployee() {
         return "NHANVIEN".equals(this.accountType);
     }
     
-    /**
-     * Kiểm tra có phải khách hàng không
-     */
     public boolean isCustomer() {
         return "USER".equals(this.accountType);
     }
     
-    /**
-     * Validate role cho nhân viên
-     */
     public void validateRole() {
         if (isEmployee()) {
             String roleUpper = role != null ? role.toUpperCase() : "";
@@ -92,9 +73,6 @@ public class LoginUser extends User {
         }
     }
     
-    /**
-     * Lấy role chuẩn hóa (uppercase)
-     */
     public String getNormalizedRole() {
         if (isCustomer()) {
             return "CUSTOMER";

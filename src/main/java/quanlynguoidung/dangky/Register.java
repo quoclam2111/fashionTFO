@@ -1,10 +1,10 @@
 package quanlynguoidung.dangky;
 
 import config.PasswordUtil;
-import quanlynguoidung. User;
+import quanlynguoidung.User;
 
 public class Register extends User{
-    private String plainPassword;  // ⭐ Lưu password gốc tạm thời
+    private String plainPassword;
     
     public Register() {
         super();
@@ -13,18 +13,18 @@ public class Register extends User{
     public Register(String username, String password, String fullName, 
                    String email, String phone, String address) {
         super(null, username, null, fullName, email, phone, address, "active");
-        this.plainPassword = password;  // ⭐ Lưu password gốc
+        this.plainPassword = password;
     }
 
     @Override
     public void validate() {
         checkUsername(this.username);
-        checkPassword(this.plainPassword);  // ⭐ Check password GỐC
+        checkPassword(this.plainPassword);
         checkEmail(this.email);
-        checkPhone(this.phone);
+        checkPhone(this. phone);
         checkFullName(this.fullName);
         
-        // ⭐ SAU KHI VALIDATE XONG → HASH PASSWORD
+        // Hash password sau khi validate
         this.password = PasswordUtil.hashPassword(this.plainPassword);
     }
 
@@ -34,11 +34,36 @@ public class Register extends User{
     }
 
     private void checkPassword(String password) {
+        // 1. Kiểm tra null/empty
         if(password == null || password.isEmpty())
             throw new IllegalArgumentException("Vui lòng nhập mật khẩu!");
         
+        // 2. Kiểm tra độ dài tối thiểu
         if(password.length() < 6)
             throw new IllegalArgumentException("Mật khẩu phải có ít nhất 6 ký tự!");
+        
+        // 3. Kiểm tra có chữ HOA
+        if(!hasUpperCase(password))
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 1 chữ cái viết hoa!");
+        
+        // 4. Kiểm tra có ký tự đặc biệt
+        if(!hasSpecialChar(password))
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 1 ký tự đặc biệt (! @#$%^&*...)!");
+    }
+    
+    /**
+     * Kiểm tra password có ít nhất 1 chữ HOA
+     */
+    private boolean hasUpperCase(String password) {
+        return password.matches(".*[A-Z].*");
+    }
+    
+    /**
+     * Kiểm tra password có ít nhất 1 ký tự đặc biệt
+     */
+    private boolean hasSpecialChar(String password) {
+        // Các ký tự đặc biệt cho phép:  !@#$%^&*()_+-=[]{};':"\\|,.<>/? 
+        return password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
     }
 
     private void checkEmail(String email) {
@@ -58,7 +83,7 @@ public class Register extends User{
     }
     
     private void checkFullName(String fullName) {
-        if(fullName == null || fullName. trim().isEmpty())
+        if(fullName == null || fullName.trim().isEmpty())
             throw new IllegalArgumentException("Vui lòng nhập họ tên!");
     }
 }
