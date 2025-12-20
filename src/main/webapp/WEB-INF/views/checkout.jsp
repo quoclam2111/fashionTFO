@@ -544,20 +544,49 @@
             btn.textContent = 'Đang xử lý...';
 
             const formData = new FormData(event.target);
-            const orderData = {
-                userId: '<%= userId %>',
-                fullName: formData.get('fullName'),
-                phone: formData.get('phone'),
-                email: formData.get('email'),
-                address: formData.get('address'),
-                note: formData.get('note'),
-                paymentMethod: formData.get('paymentMethod'),
-                items: cartItems,
-                total: calculateTotal() + (calculateTotal() > 500000 ? 0 : 30000) + Math.round(calculateTotal() * 0.1),
-                orderDate: new Date().toISOString()
-            };
+            
+            // Tính tổng tiền
+            const subtotal = calculateTotal();
+            const shipping = subtotal > 500000 ? 0 : 30000;
+            const tax = Math.round(subtotal * 0.1);
+            const total = subtotal + shipping + tax;
+            
+            // Thêm total vào formData
+            formData.append('totalAmount', total);
 
             const contextPath = '<%= request.getContextPath() %>';
+
+            // Gửi request đến server
+            fetch(contextPath + '/api/checkout', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Order created:', data.orderId);
+                    
+                    // Xóa giỏ hàng
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('checkoutCart');
+                    
+                    // Chuyển đến trang success
+                    location.href = contextPath + '/order-success?orderId=' + data.orderId;
+                } else {
+                    alert('❌ ' + data.message);
+                    btn.disabled = false;
+                    btn.textContent = 'Đặt hàng';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Có lỗi xảy ra. Vui lòng thử lại!');
+                btn.disabled = false;
+                btn.textContent = 'Đặt hàng';
+            });
+        }
+
+            
 
             // Simulate API call
             setTimeout(function() {

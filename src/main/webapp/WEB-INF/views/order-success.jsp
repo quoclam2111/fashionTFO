@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="repository.jdbc.OrderRepoImpl" %>
+<%@ page import="repository.DTO.OrderDTO" %>
+<%@ page import="java.util.Optional" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%
     String fullName = (String) session.getAttribute("fullName");
     if (fullName == null || !"CUSTOMER".equals(session.getAttribute("role"))) {
@@ -7,7 +13,29 @@
     }
     
     String orderId = request.getParameter("orderId");
-    if (orderId == null) orderId = "ORD" + System.currentTimeMillis();
+    OrderDTO order = null;
+    
+    // Lấy thông tin order từ database
+    if (orderId != null && !orderId.isEmpty()) {
+        try {
+            OrderRepoImpl orderRepo = new OrderRepoImpl();
+            Optional<OrderDTO> orderOpt = orderRepo.findById(orderId);
+            if (orderOpt.isPresent()) {
+                order = orderOpt.get();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // Nếu không tìm thấy order, tạo orderId mặc định
+    if (orderId == null || orderId.isEmpty()) {
+        orderId = "ORD" + System.currentTimeMillis();
+    }
+    
+    // Format tiền VND
+    NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -212,6 +240,14 @@
             font-weight: 600;
         }
 
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 600px) {
             .success-container {
                 padding: 30px 20px;
@@ -234,24 +270,63 @@
             Đơn hàng của bạn đã được tiếp nhận và đang được xử lý.
         </p>
 
-        <div class="order-info">
-            <div class="info-row">
-                <div class="info-label">Mã đơn hàng</div>
-                <div class="info-value order-id">#<%= orderId %></div>
+        <% if (order != null) { %>
+            <!-- Hiển thị thông tin từ database -->
+            <div class="order-info">
+                <div class="info-row">
+                    <div class="info-label">Mã đơn hàng</div>
+                    <div class="info-value order-id">#<%= order.id.substring(0, Math.min(8, order.id.length())) %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Thời gian đặt</div>
+                    <div class="info-value"><%= dateFormat.format(order.orderDate) %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Người nhận</div>
+                    <div class="info-value"><%= order.customerName %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Số điện thoại</div>
+                    <div class="info-value"><%= order.customerPhone %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Địa chỉ giao hàng</div>
+                    <div class="info-value"><%= order.customerAddress %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Tổng tiền</div>
+                    <div class="info-value" style="color: #667eea; font-size: 18px;"><%= vndFormat.format(order.totalAmount) %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Trạng thái</div>
+                    <div class="info-value" style="color: #ffc107;">⏳ <%= "pending".equals(order.status) ? "Đang xử lý" : order.status %></div>
+                </div>
             </div>
-            <div class="info-row">
-                <div class="info-label">Thời gian đặt</div>
-                <div class="info-value" id="orderTime"></div>
+        <% } else { %>
+            <!-- Fallback nếu không tìm thấy order -->
+            <div class="order-info">
+                <div class="info-row">
+                    <div class="info-label">Mã đơn hàng</div>
+                    <div class="info-value order-id">#<%= orderId %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Thời gian đặt</div>
+                    <div class="info-value" id="orderTime"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Người nhận</div>
+                    <div class="info-value"><%= fullName %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Trạng thái</div>
+                    <div class="info-value" style="color: #ffc107;">⏳ Đang xử lý</div>
+                </div>
             </div>
-            <div class="info-row">
-                <div class="info-label">Người nhận</div>
-                <div class="info-value"><%= fullName %></div>
+            
+            <div class="error-message">
+                ⚠️ Không tìm thấy chi tiết đơn hàng. Vui lòng liên hệ hotline để được hỗ trợ.
             </div>
-            <div class="info-row">
-                <div class="info-label">Trạng thái</div>
-                <div class="info-value" style="color: #ffc107;">⏳ Đang xử lý</div>
-            </div>
-        </div>
+        <% } %>
 
         <div class="next-steps">
             <h3>📋 Các bước tiếp theo:</h3>
@@ -264,7 +339,7 @@
         </div>
 
         <div class="btn-group">
-            <a href="${pageContext.request.contextPath}/orders" class="btn btn-primary">
+            <a href="${pageContext.request.contextPath}/admin/orders" class="btn btn-primary">
                 Xem đơn hàng
             </a>
             <a href="${pageContext.request.contextPath}/home" class="btn btn-secondary">
@@ -278,19 +353,25 @@
     </div>
 
     <script>
-        // Display order time
-        const now = new Date();
-        const timeStr = now.toLocaleString('vi-VN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-        document.getElementById('orderTime').textContent = timeStr;
+        <% if (order == null) { %>
+            // Chỉ hiển thị thời gian động nếu không có order từ database
+            const now = new Date();
+            const timeStr = now.toLocaleString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const timeElement = document.getElementById('orderTime');
+            if (timeElement) {
+                timeElement.textContent = timeStr;
+            }
+        <% } %>
 
         // Clear checkout cart
         localStorage.removeItem('checkoutCart');
+        localStorage.removeItem('cart');
     </script>
 </body>
 </html>
