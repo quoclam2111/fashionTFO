@@ -1,36 +1,36 @@
 package quanlynguoidung.dangky;
 
-import quanlynguoidung.User;
+import config.PasswordUtil;
+import quanlynguoidung. User;
 
 public class Register extends User{
+    private String plainPassword;  // ⭐ Lưu password gốc tạm thời
+    
     public Register() {
         super();
     }
 
     public Register(String username, String password, String fullName, 
                    String email, String phone, String address) {
-        super(null, username, password, fullName, email, phone, address, "active");
+        super(null, username, null, fullName, email, phone, address, "active");
+        this.plainPassword = password;  // ⭐ Lưu password gốc
     }
 
     @Override
     public void validate() {
         checkUsername(this.username);
-        checkPassword(this.password);
+        checkPassword(this.plainPassword);  // ⭐ Check password GỐC
         checkEmail(this.email);
         checkPhone(this.phone);
         checkFullName(this.fullName);
+        
+        // ⭐ SAU KHI VALIDATE XONG → HASH PASSWORD
+        this.password = PasswordUtil.hashPassword(this.plainPassword);
     }
 
-    // ⭐ Validation methods cho AddUser
     private void checkUsername(String username) {
         if(username == null || username.trim().isEmpty())
             throw new IllegalArgumentException("Vui lòng nhập tên đăng nhập!");
-        
-//        if(username.length() < 3)
-//            throw new IllegalArgumentException("Tên đăng nhập phải có ít nhất 3 ký tự!");
-//        
-//        if(!username.matches("^[a-zA-Z0-9_]+$"))
-//            throw new IllegalArgumentException("Tên đăng nhập chỉ được chứa chữ, số và dấu gạch dưới!");
     }
 
     private void checkPassword(String password) {
@@ -56,9 +56,9 @@ public class Register extends User{
         if(!phone.matches("\\d{9,12}"))
             throw new IllegalArgumentException("Số điện thoại phải từ 9-12 chữ số!");
     }
+    
     private void checkFullName(String fullName) {
-        if(fullName == null || fullName.trim().isEmpty())
+        if(fullName == null || fullName. trim().isEmpty())
             throw new IllegalArgumentException("Vui lòng nhập họ tên!");
     }
-
 }

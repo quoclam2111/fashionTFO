@@ -1,5 +1,6 @@
 package quanlynguoidung.dangnhap;
 
+import config.PasswordUtil;  // ⭐ Import
 import quanlynguoidung.User;
 
 /**
@@ -36,7 +37,7 @@ public class LoginUser extends User {
             throw new IllegalArgumentException("Password không được để trống");
         }
         
-        if (username.length() < 3) {
+        if (username. length() < 3) {
             throw new IllegalArgumentException("Username phải có ít nhất 3 ký tự");
         }
         
@@ -53,13 +54,14 @@ public class LoginUser extends User {
     }
     
     /**
-     * Kiểm tra password có khớp không
+     * ⭐ Kiểm tra password có khớp không - DÙNG BCRYPT
      */
     public boolean verifyPassword(String inputPassword) {
         if (inputPassword == null) {
             return false;
         }
-        return this.password.equals(inputPassword);
+        // ⭐ So sánh password nhập vào với hash trong DB
+        return PasswordUtil.verifyPassword(inputPassword, this.password);
     }
     
     /**
@@ -85,7 +87,7 @@ public class LoginUser extends User {
             if (!roleUpper.equals("ADMIN") && 
                 !roleUpper.equals("MANAGER") && 
                 !roleUpper.equals("STAFF")) {
-                throw new IllegalArgumentException("Role không hợp lệ: " + role);
+                throw new IllegalArgumentException("Role không hợp lệ:  " + role);
             }
         }
     }

@@ -19,22 +19,29 @@ public class RegisterUseCase extends QuanLyNguoiDungControl {
     }
     
     @Override
-	protected void execute(QuanLyNguoiDungRequestData request) {
-    	try {
-            // 1. Convert input → AddUser entity
-            Register user = convertToBusinessObject(request);
+    protected void execute(QuanLyNguoiDungRequestData request) {
+        try {
+            // ⭐ 1. TẠO ENTITY VỚI PASSWORD GỐC để validate
+            Register user = new Register(
+                request. username,
+                request.password,  // password GỐC (chưa hash)
+                request.fullName,
+                request.email,
+                request.phone,
+                request.address
+            );
             
-            // 2. Validate input - sẽ ném ngoại lệ nếu sai
+            // 2. Validate input - password gốc sẽ được check < 6 ký tự
             user.validate();
             
             // 3. Kiểm tra email đã tồn tại
             if (repository.existsByEmail(request.email)) {
                 response.success = false;
-                response.message = "Email này đã được sử dụng!";
+                response.message = "Email này đã được sử dụng! ";
                 return;
             }
             
-            // 4. Convert AddUser → UserDTO
+            // 4. Convert AddUser → UserDTO (password ĐÃ HASH ở constructor)
             UserDTO dto = convertToDTO(user);
             
             // 5. Save vào repository
@@ -44,19 +51,17 @@ public class RegisterUseCase extends QuanLyNguoiDungControl {
             ResponseDataRegister registerResponse = (ResponseDataRegister) response;
             
             response.success = true;
-            response.message = "Thêm người dùng thành công!";
+            response.message = "Thêm người dùng thành công! ";
             registerResponse.registeredUserId = user.getId();
             registerResponse.username = user.getUsername();
             
         } catch (IllegalArgumentException ex) {
-            // Nếu validation fail → báo lỗi
             response.success = false;
             response.message = ex.getMessage();
         } catch (Exception ex) {
             response.success = false;
             response.message = "Lỗi hệ thống: " + ex.getMessage();
         }
-        
     }
     
     /**
