@@ -21,4 +21,10 @@ public class QuanLyNguoiDungResponseData {
     public List<UserDTO> users;
     public int totalCount;
     public int filteredCount;
+    
+    // ⭐ Data cho "verify-otp" action
+    public String userId;           // ID user vừa đăng ký
+    public boolean otpSent;         // Email OTP đã gửi thành công chưa
+    public boolean otpVerified;     // OTP đã được xác thực chưa
+    public int remainingAttempts;   // Số lần thử còn lại (nếu nhập sai)
 }

@@ -215,6 +215,132 @@ public class UserRepoImpl implements RegisterRepoGateway, GetUserRepositoryGatew
         }
         return list;
     }
+    
+ // ============================================================
+ // 📧 OTP VERIFICATION METHODS
+ // ============================================================
+
+ @Override
+ public void saveOTP(String userId, String otpCode) {
+     String sql = "INSERT INTO email_verification (verification_id, user_id, otp_code, expires_at) " +
+                  "VALUES (UUID(), ?, ?, DATE_ADD(NOW(), INTERVAL 10 MINUTE))";
+     
+     try (Connection conn = DBConnection.getConnection();
+          PreparedStatement ps = conn.prepareStatement(sql)) {
+         
+         ps. setString(1, userId);
+         ps.setString(2, otpCode);
+         ps.executeUpdate();
+         
+         System.out.println("✅ Đã lưu OTP cho user: " + userId + " - OTP: " + otpCode);
+         
+     } catch (SQLException e) {
+         System.err.println("❌ Lỗi khi lưu OTP: " + e.getMessage());
+         throw new RuntimeException("Error saving OTP", e);
+     } catch (Exception e) {
+         throw new RuntimeException("Không thể kết nối DB:  " + e.getMessage(), e);
+     }
+ }
+
+ @Override
+ public boolean verifyOTP(String userId, String otpCode) {
+     String sql = "SELECT COUNT(*) FROM email_verification " +
+                  "WHERE user_id = ? AND otp_code = ?  AND verified_at IS NULL AND expires_at > NOW()";
+     
+     try (Connection conn = DBConnection.getConnection();
+          PreparedStatement ps = conn.prepareStatement(sql)) {
+         
+         ps.setString(1, userId);
+         ps.setString(2, otpCode);
+         ResultSet rs = ps.executeQuery();
+         
+         if (rs. next() && rs.getInt(1) > 0) {
+             System.out.println("✅ OTP hợp lệ cho user: " + userId);
+             return true;
+         }
+         
+         System.out.println("⚠️ OTP không hợp lệ hoặc đã hết hạn");
+         return false;
+         
+     } catch (SQLException e) {
+         System.err.println("❌ Lỗi khi verify OTP: " + e.getMessage());
+         throw new RuntimeException("Error verifying OTP", e);
+     } catch (Exception e) {
+         throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
+     }
+ }
+
+ @Override
+ public void markEmailAsVerified(String userId) {
+     String sql1 = "UPDATE users SET status = 'active' WHERE user_id = ?";
+     String sql2 = "UPDATE email_verification SET verified_at = NOW() WHERE user_id = ?  AND verified_at IS NULL";
+     
+     try (Connection conn = DBConnection.getConnection()) {
+         conn.setAutoCommit(false);
+         
+         try (PreparedStatement ps1 = conn.prepareStatement(sql1);
+              PreparedStatement ps2 = conn.prepareStatement(sql2)) {
+             
+             ps1.setString(1, userId);
+             ps1.executeUpdate();
+             
+             ps2.setString(1, userId);
+             ps2.executeUpdate();
+             
+             conn.commit();
+             System.out.println("✅ Đã xác thực email cho user: " + userId);
+             
+         } catch (SQLException e) {
+             conn.rollback();
+             throw e;
+         }
+         
+     } catch (SQLException e) {
+         System.err.println("❌ Lỗi khi xác thực email: " + e.getMessage());
+         throw new RuntimeException("Error marking email as verified", e);
+     } catch (Exception e) {
+         throw new RuntimeException("Không thể kết nối DB: " + e. getMessage(), e);
+     }
+ }
+
+ @Override
+ public int getOTPAttempts(String userId) {
+     String sql = "SELECT attempts FROM email_verification WHERE user_id = ?  AND verified_at IS NULL ORDER BY created_at DESC LIMIT 1";
+     
+     try (Connection conn = DBConnection.getConnection();
+          PreparedStatement ps = conn.prepareStatement(sql)) {
+         
+         ps.setString(1, userId);
+         ResultSet rs = ps.executeQuery();
+         
+         if (rs.next()) {
+             return rs.getInt("attempts");
+         }
+         return 0;
+         
+     } catch (SQLException e) {
+         throw new RuntimeException("Error getting OTP attempts", e);
+     } catch (Exception e) {
+         throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
+     }
+ }
+
+ @Override
+ public void incrementOTPAttempts(String userId) {
+     String sql = "UPDATE email_verification SET attempts = attempts + 1 WHERE user_id = ? AND verified_at IS NULL";
+     
+     try (Connection conn = DBConnection.getConnection();
+          PreparedStatement ps = conn.prepareStatement(sql)) {
+         
+         ps. setString(1, userId);
+         ps.executeUpdate();
+         
+     } catch (SQLException e) {
+         throw new RuntimeException("Error incrementing OTP attempts", e);
+     } catch (Exception e) {
+         throw new RuntimeException("Không thể kết nối DB: " + e.getMessage(), e);
+     }
+ }
 
     // ==================== HELPER ====================
     private UserDTO mapResultSetToDTO(ResultSet rs) throws SQLException {

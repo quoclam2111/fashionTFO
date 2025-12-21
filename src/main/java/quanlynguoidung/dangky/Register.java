@@ -11,10 +11,11 @@ public class Register extends User{
     }
 
     public Register(String username, String password, String fullName, 
-                   String email, String phone, String address) {
-        super(null, username, null, fullName, email, phone, address, "active");
-        this.plainPassword = password;
-    }
+            String email, String phone, String address) {
+ // ⭐ Status = "pending" cho đến khi verify email
+ super(null, username, null, fullName, email, phone, address, "pending");
+ this.plainPassword = password;
+}
 
     @Override
     public void validate() {

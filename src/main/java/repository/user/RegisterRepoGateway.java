@@ -7,4 +7,11 @@ public interface RegisterRepoGateway {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
     boolean existsByUsername(String username);
+    
+    
+    void saveOTP(String userId, String otpCode);
+    boolean verifyOTP(String userId, String otpCode);
+    void markEmailAsVerified(String userId);
+    int getOTPAttempts(String userId);
+    void incrementOTPAttempts(String userId);
 }
