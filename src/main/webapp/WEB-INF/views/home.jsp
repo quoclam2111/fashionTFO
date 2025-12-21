@@ -3,7 +3,7 @@
 <%@ page import="quanlysanpham.list.ProductViewItem" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="java.text.NumberFormat" %>
-<%@ page import="java.util.Locale" %>
+<%@ page import="java.util. Locale" %>
 <%
     // Kiểm tra user đã login chưa
     String fullName = (String) session.getAttribute("fullName");
@@ -31,7 +31,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
+            background:  #f5f5f5;
         }
 
         /* Navbar */
@@ -41,7 +41,7 @@
             padding: 15px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index:  100;
         }
 
         .navbar-content {
@@ -55,7 +55,7 @@
 
         .logo {
             font-size: 28px;
-            font-weight: 700;
+            font-weight:  700;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -79,16 +79,16 @@
             gap: 8px;
         }
 
-        .nav-menu a:hover {
+        . nav-menu a:hover {
             color: #667eea;
         }
 
         .cart-badge {
             background: #e74c3c;
-            color: white;
+            color:  white;
             border-radius: 50%;
             padding: 2px 8px;
-            font-size: 12px;
+            font-size:  12px;
             font-weight: 600;
         }
 
@@ -120,11 +120,11 @@
 
         .btn-login:hover {
             background: #667eea;
-            color: white;
+            color:  white;
         }
 
-        .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        . btn-register {
+            background:  linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
@@ -168,12 +168,12 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 80px 30px;
-            text-align: center;
+            text-align:  center;
         }
 
-        .hero h1 {
+        . hero h1 {
             font-size: 56px;
-            margin-bottom: 20px;
+            margin-bottom:  20px;
             animation: fadeInDown 1s;
         }
 
@@ -184,10 +184,10 @@
             animation: fadeInUp 1s;
         }
 
-        .hero .btn {
+        . hero . btn {
             font-size: 16px;
             padding: 14px 32px;
-            animation: fadeIn 1.5s;
+            animation: fadeIn 1. 5s;
         }
 
         /* Container */
@@ -197,7 +197,7 @@
             padding: 60px 30px;
         }
 
-        .section-title {
+        . section-title {
             text-align: center;
             margin-bottom: 50px;
         }
@@ -208,7 +208,7 @@
             margin-bottom: 15px;
         }
 
-        .section-title p {
+        . section-title p {
             font-size: 18px;
             color: #666;
         }
@@ -221,9 +221,9 @@
             margin-bottom: 60px;
         }
 
-        .product-card {
-            background: white;
-            border-radius: 15px;
+        . product-card {
+            background:  white;
+            border-radius:  15px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
@@ -232,7 +232,7 @@
 
         .product-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow:  0 10px 30px rgba(0,0,0,0.15);
         }
 
         .product-image {
@@ -261,7 +261,7 @@
             color: white;
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size:  12px;
             font-weight: 600;
         }
 
@@ -269,7 +269,7 @@
             background: #e74c3c;
         }
 
-        .product-badge.new {
+        .product-badge. new {
             background: #2ecc71;
         }
 
@@ -277,7 +277,7 @@
             padding: 25px;
         }
 
-        .product-category {
+        . product-category {
             color: #999;
             font-size: 13px;
             text-transform: uppercase;
@@ -285,9 +285,9 @@
             margin-bottom: 8px;
         }
 
-        .product-name {
+        . product-name {
             font-size: 20px;
-            font-weight: 600;
+            font-weight:  600;
             color: #333;
             margin-bottom: 10px;
             white-space: nowrap;
@@ -297,7 +297,7 @@
 
         .product-price {
             font-size: 24px;
-            font-weight: 700;
+            font-weight:  700;
             color: #667eea;
             margin-bottom: 15px;
         }
@@ -317,23 +317,23 @@
             flex: 1;
             background: #667eea;
             color: white;
-            border: none;
+            border:  none;
             padding: 12px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s;
+            transition:  all 0.3s;
         }
 
         .btn-add-cart:hover {
-            background: #5568d3;
+            background:  #5568d3;
         }
 
         .btn-view {
             width: 45px;
             height: 45px;
             background: #f8f9fa;
-            border: none;
+            border:  none;
             border-radius: 8px;
             cursor: pointer;
             display: flex;
@@ -353,11 +353,11 @@
             color: #c33;
             padding: 20px;
             border-radius: 10px;
-            text-align: center;
-            margin: 20px 0;
+            text-align:  center;
+            margin:  20px 0;
         }
 
-        .empty-state {
+        . empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #999;
@@ -365,7 +365,7 @@
 
         .empty-state h3 {
             font-size: 24px;
-            margin-bottom: 10px;
+            margin-bottom:  10px;
         }
 
         /* Footer */
@@ -375,7 +375,7 @@
             padding: 60px 30px 30px;
         }
 
-        .footer-content {
+        . footer-content {
             max-width: 1400px;
             margin: 0 auto;
             display: grid;
@@ -397,7 +397,7 @@
             margin-bottom: 12px;
         }
 
-        .footer-section a {
+        . footer-section a {
             color: #bdc3c7;
             text-decoration: none;
             transition: color 0.3s;
@@ -410,7 +410,7 @@
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
-            border-top: 1px solid #34495e;
+            border-top:  1px solid #34495e;
             color: #bdc3c7;
         }
 
@@ -428,7 +428,7 @@
 
         @keyframes fadeInUp {
             from {
-                opacity: 0;
+                opacity:  0;
                 transform: translateY(30px);
             }
             to {
@@ -464,7 +464,7 @@
                 gap: 8px;
             }
 
-            .btn {
+            . btn {
                 padding: 8px 16px;
                 font-size: 13px;
             }
@@ -500,17 +500,17 @@
             <div class="auth-buttons">
                 <% if (isLoggedIn) { %>
                     <div class="user-info">
-                        <div class="avatar"><%= fullName.substring(0, 1).toUpperCase() %></div>
+                        <div class="avatar"><%= fullName. substring(0, 1).toUpperCase() %></div>
                         <span><%= fullName %></span>
                     </div>
-                    <form method="post" action="${pageContext.request.contextPath}/logout" style="display: inline;">
+                    <form method="post" action="${pageContext.request. contextPath}/logout" style="display: inline;">
                         <button type="submit" class="btn btn-logout">Đăng xuất</button>
                     </form>
                 <% } else { %>
-                    <a href="${pageContext.request.contextPath}/login" class="btn btn-login">
+                    <a href="${pageContext.request. contextPath}/login" class="btn btn-login">
                         🔐 Đăng nhập
                     </a>
-                    <a href="${pageContext.request.contextPath}/register" class="btn btn-register">
+                    <a href="${pageContext. request.contextPath}/register" class="btn btn-register">
                         ✨ Đăng ký
                     </a>
                 <% } %>
@@ -542,13 +542,13 @@
 
             <div class="products-grid">
                 <% 
-                if (products != null && !products.isEmpty()) {
-                    for (ProductViewItem product : products) {
+                if (products != null && ! products.isEmpty()) {
+                    for (ProductViewItem product :  products) {
                         // Tính % giảm giá
                         int discountPercent = 0;
                         if (product.discountPrice != null && product.price != null 
-                            && product.discountPrice.compareTo(BigDecimal.ZERO) > 0
-                            && product.discountPrice.compareTo(product.price) < 0) {
+                            && product.discountPrice. compareTo(BigDecimal.ZERO) > 0
+                            && product.discountPrice.compareTo(product. price) < 0) {
                             
                             BigDecimal discount = product.price.subtract(product.discountPrice);
                             discountPercent = discount.multiply(new BigDecimal(100))
@@ -560,7 +560,7 @@
                         BigDecimal currentPrice = (product.discountPrice != null 
                                                    && product.discountPrice.compareTo(BigDecimal.ZERO) > 0) 
                                                    ? product.discountPrice 
-                                                   : product.price;
+                                                   : product. price;
                 %>
                     <div class="product-card">
                         <div class="product-image">
@@ -568,8 +568,8 @@
                                 <div class="product-badge sale">-<%= discountPercent %>%</div>
                             <% } %>
                             
-                            <% if (product.defaultImage != null && !product.defaultImage.trim().isEmpty()) { %>
-                                <img src="<%= product.defaultImage %>" alt="<%= product.productName %>">
+                            <% if (product.defaultImage != null && ! product.defaultImage.trim().isEmpty()) { %>
+                                <img src="<%= product. defaultImage %>" alt="<%= product.productName %>">
                             <% } else { %>
                                 👔
                             <% } %>
@@ -588,7 +588,12 @@
                             </div>
                             <div class="product-actions">
                                 <button class="btn-add-cart" 
-                                        onclick="addToCart('<%= product.productName %>', <%= currentPrice %>)">
+                                        onclick="addToCart({
+                                            id: '<%= product.productId %>',
+                                            name: '<%= product.productName. replace("'", "\\'") %>',
+                                            price: <%= currentPrice %>,
+                                            image: '<%= product.defaultImage != null ? product.defaultImage : "" %>'
+                                        })">
                                     Thêm vào giỏ
                                 </button>
                                 <button class="btn-view" 
@@ -602,7 +607,7 @@
                 %>
                     <div class="empty-state" style="grid-column: 1/-1;">
                         <h3>📦 Chưa có sản phẩm nào</h3>
-                        <p>Vui lòng quay lại sau!</p>
+                        <p>Vui lòng quay lại sau! </p>
                     </div>
                 <% } %>
             </div>
@@ -614,7 +619,7 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Fashion Store</h3>
-                <p>Cửa hàng thời trang hàng đầu Việt Nam. Chất lượng - Uy tín - Phong cách.</p>
+                <p>Cửa hàng thời trang hàng đầu Việt Nam.  Chất lượng - Uy tín - Phong cách.</p>
             </div>
 
             <div class="footer-section">
@@ -649,91 +654,145 @@
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2025 Fashion Store. All rights reserved. | Loaded <%= products != null ? products.size() : 0 %> products</p>
+            <p>&copy; 2025 Fashion Store. All rights reserved.  | Loaded <%= products != null ? products.size() : 0 %> products</p>
         </div>
     </footer>
 
-    <script>
-        const isLoggedIn = <%= isLoggedIn %>;
-        let cartItems = [];
+<script>
+    const isLoggedIn = <%= isLoggedIn %>;
+    let cartItems = [];
 
-        // Load cart from localStorage
-        function loadCart() {
-            const saved = localStorage.getItem('cart');
-            if (saved) {
-                cartItems = JSON.parse(saved);
-                updateCartBadge();
-            }
+    // ✅ Tạo variantId đồng nhất từ productId (36 ký tự)
+    function createVariantId(productId) {
+        // Nếu productId đã là UUID 36 ký tự → dùng luôn
+        if (productId && productId.length === 36 && productId.includes('-')) {
+            return productId;
         }
-
-        // Save cart to localStorage
-        function saveCart() {
-            localStorage.setItem('cart', JSON.stringify(cartItems));
+        
+        // Ngược lại → hash và padding
+        let hash = 0;
+        for (let i = 0; i < productId.length; i++) {
+            hash = ((hash << 5) - hash) + productId.charCodeAt(i);
+            hash = hash & hash;
         }
-
-        // Update cart badge
-        function updateCartBadge() {
-            const badge = document.getElementById('cartCount');
-            badge.textContent = cartItems.length;
+        
+        const hashStr = Math.abs(hash).toString(36);
+        const combined = productId + '-' + hashStr;
+        
+        // Cắt hoặc padding về đúng 36 ký tự
+        if (combined.length > 36) {
+            return combined.substring(0, 36);
+        } else {
+            return combined. padEnd(36, '0');
         }
+    }
 
-        // Add to cart
-        function addToCart(productName, price) {
-            if (!isLoggedIn) {
-                if (confirm('Bạn cần đăng nhập để mua hàng. Chuyển đến trang đăng nhập?')) {
-                    window.location.href = '${pageContext.request.contextPath}/login';
-                }
-                return;
-            }
-
-            cartItems.push({
-                name: productName,
-                price: price,
-                quantity: 1,
-                addedAt: new Date().toISOString()
-            });
-
-            saveCart();
+    // Load cart from localStorage
+    function loadCart() {
+        const saved = localStorage.getItem('cart');
+        if (saved) {
+            cartItems = JSON.parse(saved);
             updateCartBadge();
-
-            alert('✓ Đã thêm "' + productName + '" vào giỏ hàng!');
         }
+    }
 
-        // View product details
-        function viewProduct(productId) {
-            console.log('View product:', productId);
-            // TODO: Implement product detail view
-            alert('Xem chi tiết sản phẩm: ' + productId + '\n(Chức năng đang phát triển)');
+    // Save cart to localStorage
+    function saveCart() {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+    }
+
+    // Update cart badge
+    function updateCartBadge() {
+        const badge = document.getElementById('cartCount');
+        if (badge) {
+            const totalQuantity = cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+            badge. textContent = totalQuantity;
         }
+    }
 
-        function handleCart() {
-            if (!isLoggedIn) {
-                if (confirm('Bạn cần đăng nhập để xem giỏ hàng. Chuyển đến trang đăng nhập?')) {
-                    window.location.href = '<%=request.getContextPath()%>/login';
-                }
-                return;
+    // ✅ Add to cart WITH variantId (36 ký tự)
+    function addToCart(product) {
+        if (!isLoggedIn) {
+            if (confirm('Bạn cần đăng nhập để mua hàng.  Chuyển đến trang đăng nhập?')) {
+                window.location.href = '${pageContext.request.contextPath}/login';
             }
-            
-            // Chuyển đến trang giỏ hàng
-            window.location.href = '<%=request.getContextPath()%>/cart';
+            return;
         }
 
-        // Load cart on page load
-        loadCart();
+        console.log('🔍 Adding product:', product);
 
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+        // ✅ Tạo variantId đồng nhất (36 ký tự)
+        const variantId = createVariantId(product.id);
+        console.log('✅ Generated variantId (' + variantId. length + ' chars):', variantId);
+
+        // ✅ Tìm trong cart theo productId HOẶC variantId
+        let existingItem = cartItems.find(item => 
+            item. productId === product.id || item.variantId === variantId
+        );
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+            // ✅ Cập nhật variantId nếu cũ sai
+            existingItem.variantId = variantId;
+            console.log('✅ Increased quantity:', existingItem);
+        } else {
+            const cartItem = {
+                variantId: variantId,  // ← 36 ký tự
+                productId: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: 1,
+                color: 'Mặc định',
+                size: 'Free Size',
+                image: product.image || '',
+                addedAt: new Date().toISOString()
+            };
+            
+            cartItems.push(cartItem);
+            console.log('✅ Added new item:', cartItem);
+        }
+
+        saveCart();
+        updateCartBadge();
+
+        alert('✅ Đã thêm "' + product.name + '" vào giỏ hàng!');
+        console.log('📦 Current cart:', cartItems);
+    }
+
+    // View product details
+    function viewProduct(productId) {
+        console.log('View product:', productId);
+        alert('Xem chi tiết sản phẩm: ' + productId + '\n(Chức năng đang phát triển)');
+    }
+
+    // Handle cart click
+    function handleCart() {
+        if (!isLoggedIn) {
+            if (confirm('Bạn cần đăng nhập để xem giỏ hàng.  Chuyển đến trang đăng nhập?')) {
+                window.location.href = '<%=request.getContextPath()%>/login';
+            }
+            return;
+        }
+        
+        window.location.href = '<%=request.getContextPath()%>/cart';
+    }
+
+    // Load cart on page load
+    loadCart();
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor. addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
-    </script>
+    });
+</script>
 </body>
 </html>
