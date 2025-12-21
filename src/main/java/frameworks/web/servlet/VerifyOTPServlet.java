@@ -15,12 +15,12 @@ import repository.jdbc.UserRepoImpl;
 public class VerifyOTPServlet extends HttpServlet {
     
     private VerifyOTPController controller;
-    private RegisterViewModel viewModel;
+    private OTPViewModel viewModel;
 
     @Override
     public void init() throws ServletException {
         UserRepoImpl repository = new UserRepoImpl();
-        viewModel = new RegisterViewModel();
+        viewModel = new OTPViewModel();
         VerifyOTPPresenter presenter = new VerifyOTPPresenter(viewModel); // ⭐ Dùng presenter riêng
         VerifyOTPUseCase useCase = new VerifyOTPUseCase(repository, presenter);
         controller = new VerifyOTPController(useCase);

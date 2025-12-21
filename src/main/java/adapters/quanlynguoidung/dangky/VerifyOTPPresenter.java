@@ -1,15 +1,15 @@
 package adapters.quanlynguoidung.dangky;
 
-import java. text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import quanlynguoidung.QuanLyNguoiDungOutputBoundary;
 import quanlynguoidung.QuanLyNguoiDungResponseData;
 
 public class VerifyOTPPresenter implements QuanLyNguoiDungOutputBoundary {
-    private RegisterViewModel model;
+    private OTPViewModel model;  // ⭐ Đổi từ RegisterViewModel → OTPViewModel
     
-    public VerifyOTPPresenter(RegisterViewModel model) {
+    public VerifyOTPPresenter(OTPViewModel model) {
         this.model = model;
     }
     
@@ -17,17 +17,20 @@ public class VerifyOTPPresenter implements QuanLyNguoiDungOutputBoundary {
     public void present(QuanLyNguoiDungResponseData res) {
         model.success = res.success;
         model.message = res.message;
-        model.userId = res.userId;
+        model.userId = res. userId;
         
-        if (res.otpVerified != null) {
-            // Có thể thêm field vào ViewModel nếu cần
-        }
+        // ⭐ Set các field OTP - KHÔNG CẦN check null vì là primitive
+        model.otpVerified = res.otpVerified;
+        model.remainingAttempts = res.remainingAttempts;
         
         model.timestamp = converter(res.timestamp);
     }
     
     private String converter(Date timestamp) {
+        if (timestamp == null) {
+            timestamp = new Date();
+        }
         SimpleDateFormat converter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return converter. format(timestamp);
+        return converter.format(timestamp);
     }
 }
