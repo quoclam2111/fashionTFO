@@ -1,7 +1,7 @@
 package quanlynguoidung.dangnhap;
 
-import config. PasswordUtil;  // ⭐ Import
-import quanlynguoidung. User;
+import config. PasswordUtil;
+import quanlynguoidung.User;
 
 public class LoginUser extends User {
     private String role;
@@ -44,18 +44,33 @@ public class LoginUser extends User {
     }
     
     /**
-     * ⭐ Verify password với BCrypt
+     * ⭐ Verify password
+     * - Admin/Staff: Plain text
+     * - Customer: BCrypt hash
      */
     public boolean verifyPassword(String inputPassword) {
         if (inputPassword == null) {
             return false;
         }
-        // ⭐ So sánh password nhập vào với hash trong DB
-        return PasswordUtil.verifyPassword(inputPassword, this. password);
+        
+        // ✅ Nếu là NHÂN VIÊN (admin/manager/staff) → Plain text
+        if (isEmployee()) {
+            System.out.println("🔑 Admin/Staff login - Using plain text comparison");
+            return inputPassword.equals(this.password);
+        }
+        
+        // ✅ Nếu là CUSTOMER → BCrypt hash
+        try {
+            System.out.println("🔑 Customer login - Using BCrypt verification");
+            return PasswordUtil.verifyPassword(inputPassword, this.password);
+        } catch (Exception e) {
+            System.err.println("❌ Lỗi BCrypt verify: " + e.getMessage());
+            return false;
+        }
     }
     
     public boolean isEmployee() {
-        return "NHANVIEN".equals(this.accountType);
+        return "NHANVIEN".equals(this. accountType);
     }
     
     public boolean isCustomer() {
@@ -65,7 +80,7 @@ public class LoginUser extends User {
     public void validateRole() {
         if (isEmployee()) {
             String roleUpper = role != null ? role.toUpperCase() : "";
-            if (!roleUpper.equals("ADMIN") && 
+            if (!roleUpper. equals("ADMIN") && 
                 !roleUpper.equals("MANAGER") && 
                 !roleUpper.equals("STAFF")) {
                 throw new IllegalArgumentException("Role không hợp lệ:  " + role);
