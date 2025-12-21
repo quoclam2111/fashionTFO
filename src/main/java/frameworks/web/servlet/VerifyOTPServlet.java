@@ -3,7 +3,7 @@ package frameworks.web.servlet;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet. http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -21,7 +21,7 @@ public class VerifyOTPServlet extends HttpServlet {
     public void init() throws ServletException {
         UserRepoImpl repository = new UserRepoImpl();
         viewModel = new OTPViewModel();
-        VerifyOTPPresenter presenter = new VerifyOTPPresenter(viewModel); // ⭐ Dùng presenter riêng
+        VerifyOTPPresenter presenter = new VerifyOTPPresenter(viewModel);
         VerifyOTPUseCase useCase = new VerifyOTPUseCase(repository, presenter);
         controller = new VerifyOTPController(useCase);
     }
@@ -36,18 +36,25 @@ public class VerifyOTPServlet extends HttpServlet {
         String userId = request.getParameter("userId");
         String otp = request.getParameter("otp");
 
+        System.out.println("🔍 DEBUG - userId: " + userId);
+        System.out.println("🔍 DEBUG - otp: " + otp);
+
         // Gọi controller
         controller.verify(userId, otp);
+
+        System.out.println("🔍 DEBUG - success: " + viewModel.success);
+        System.out.println("🔍 DEBUG - message: " + viewModel.message);
 
         if (viewModel.success) {
             // ✅ Xác thực thành công
             request.setAttribute("success", viewModel.message);
             request. getRequestDispatcher("/WEB-INF/views/verify-otp-success.jsp").forward(request, response);
         } else {
-            // ❌ Xác thực thất bại
+            // ❌ Xác thực thất bại → Quay lại form nhập OTP
             request.setAttribute("error", viewModel.message);
-            request. setAttribute("userId", userId);
-            request.getRequestDispatcher("/WEB-INF/views/register-success.jsp").forward(request, response);
+            request.setAttribute("userId", userId);
+            request.setAttribute("remainingAttempts", viewModel. remainingAttempts);
+            request.getRequestDispatcher("/WEB-INF/views/verify-otp-form.jsp").forward(request, response);
         }
     }
 }

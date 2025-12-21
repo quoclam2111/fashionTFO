@@ -1,5 +1,7 @@
 package repository.user;
 
+import java.util.Optional;
+
 import repository.DTO.UserDTO;
 
 public interface RegisterRepoGateway {
@@ -8,6 +10,7 @@ public interface RegisterRepoGateway {
     boolean existsByPhone(String phone);
     boolean existsByUsername(String username);
     
+    Optional<UserDTO> findById(String userId);
     
     void saveOTP(String userId, String otpCode);
     boolean verifyOTP(String userId, String otpCode);

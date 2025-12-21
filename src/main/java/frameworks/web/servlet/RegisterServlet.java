@@ -28,7 +28,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/register. jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class RegisterServlet extends HttpServlet {
             // ❌ Đăng ký thất bại → Hiển thị lỗi
             request.setAttribute("error", otpViewModel.message);
             request.setAttribute("formData", dto);
-            request. getRequestDispatcher("/WEB-INF/views/register. jsp").forward(request, response);
+            request. getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
         }
     }
 }

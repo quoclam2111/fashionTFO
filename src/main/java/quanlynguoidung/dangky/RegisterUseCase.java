@@ -2,10 +2,9 @@ package quanlynguoidung.dangky;
 
 import config.EmailService;
 import config.OTPUtil;
-import config. PasswordUtil;
 import quanlynguoidung.*;
 import repository. DTO.UserDTO;
-import repository.user.RegisterRepoGateway;
+import repository. user.RegisterRepoGateway;
 
 public class RegisterUseCase extends QuanLyNguoiDungControl {
     private final RegisterRepoGateway repository;
@@ -22,65 +21,82 @@ public class RegisterUseCase extends QuanLyNguoiDungControl {
         try {
             // 1. Tạo entity
             Register user = new Register(
-                request. username,
+                request.username,
                 request.password,
                 request.fullName,
                 request.email,
-                request.phone,
+                request. phone,
                 request.address
             );
             
-            // 2. Validate
+            // 2. Validate (kiểm tra format)
             user.validate();
             
-            // 3. Check email tồn tại
-            if (repository.existsByEmail(request.email)) {
-                response. success = false;
-                response. message = "Email này đã được sử dụng!";
+            // 3. ✅ Kiểm tra username đã tồn tại chưa
+            if (repository. existsByUsername(request.username)) {
+                response.success = false;
+                response.message = "Tên đăng nhập này đã được sử dụng!";
                 return;
             }
             
-            // 4. Convert DTO
+            // 4. ✅ Kiểm tra email đã tồn tại chưa
+            if (repository.existsByEmail(request.email)) {
+                response.success = false;
+                response.message = "Email này đã được sử dụng!";
+                return;
+            }
+            
+            // 5. ✅ Kiểm tra phone đã tồn tại chưa
+            if (repository.existsByPhone(request.phone)) {
+                response.success = false;
+                response.message = "Số điện thoại này đã được sử dụng!";
+                return;
+            }
+            
+            // 6. Convert sang DTO
             UserDTO dto = convertToDTO(user);
             
-            // 5. Save user (status = "pending")
+            // 7. ✅ Giờ mới save vào DB (đã chắc chắn không trùng)
             repository.save(dto);
             
-            // 6. Generate OTP 6 số
+            // 8. Generate OTP 6 chữ số
             String otpCode = OTPUtil.generateOTP();
             
-            // 7. Lưu OTP vào DB
-            repository.saveOTP(user.getId(), otpCode);
+            // 9.  Lưu OTP vào DB
+            repository.saveOTP(user. getId(), otpCode);
             
-            // 8. Gửi OTP qua email
+            // 10. Gửi OTP qua email
             boolean emailSent = EmailService.sendOTPEmail(
                 user.getEmail(), 
                 user.getUsername(), 
                 otpCode
             );
             
-            // 9. Response
+            // 11. Chuẩn bị response
             ResponseDataRegister registerResponse = (ResponseDataRegister) response;
             response.success = true;
             
             if (emailSent) {
-                response.message = "Đăng ký thành công!  Vui lòng kiểm tra email để lấy mã OTP.";
-                registerResponse.otpSent = true;  // ⭐ Set flag
+                response.message = "Đăng ký thành công! Vui lòng kiểm tra email để lấy mã OTP.";
+                registerResponse.otpSent = true;
             } else {
                 response.message = "Đăng ký thành công! Tuy nhiên không thể gửi email OTP.  Vui lòng liên hệ admin.";
-                registerResponse.otpSent = false; // ⭐ Set flag
+                registerResponse.otpSent = false;
             }
             
             registerResponse.registeredUserId = user.getId();
-            registerResponse.username = user.getUsername();
-            registerResponse.userId = user.getId(); // ⭐ Set userId cho cha
+            registerResponse. username = user.getUsername();
+            registerResponse.userId = user. getId();
             
         } catch (IllegalArgumentException ex) {
+            // Lỗi validation (từ Register.validate())
             response.success = false;
             response.message = ex.getMessage();
+            
         } catch (Exception ex) {
-            response. success = false;
-            response. message = "Lỗi hệ thống: " + ex.getMessage();
+            // Lỗi không mong muốn
+            response.success = false;
+            response.message = "Lỗi hệ thống: " + ex.getMessage();
             ex.printStackTrace();
         }
     }
@@ -89,9 +105,9 @@ public class RegisterUseCase extends QuanLyNguoiDungControl {
         UserDTO dto = new UserDTO();
         dto.id = user.getId();
         dto.username = user.getUsername();
-        dto.password = user.getPassword();
+        dto.password = user. getPassword();
         dto.fullName = user.getFullName();
-        dto.email = user.getEmail();
+        dto.email = user. getEmail();
         dto.phone = user.getPhone();
         dto.address = user.getAddress();
         dto.status = user.getStatus(); // "pending"

@@ -7,6 +7,5 @@ public class ResponseDataRegister extends QuanLyNguoiDungResponseData {
     public String username;         // Username vừa đăng ký
     
     
-    // ⭐ Thêm field otpSent
-    public Boolean otpSent;  // Email OTP đã gửi thành công chưa
+
 }

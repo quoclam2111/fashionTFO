@@ -1,7 +1,9 @@
 package quanlynguoidung.dangky;
 
 import quanlynguoidung.*;
-import repository.user.RegisterRepoGateway;
+import repository. DTO.UserDTO;
+import repository. user.RegisterRepoGateway;
+import java.util.Optional;
 
 public class VerifyOTPUseCase extends QuanLyNguoiDungControl {
     private final RegisterRepoGateway repository;
@@ -10,14 +12,14 @@ public class VerifyOTPUseCase extends QuanLyNguoiDungControl {
                            QuanLyNguoiDungOutputBoundary presenter) {
         super(presenter);
         this.repository = repository;
-        this.response = new QuanLyNguoiDungResponseData(); // ⭐ Dùng class cha
+        this.response = new QuanLyNguoiDungResponseData();
     }
     
     @Override
     protected void execute(QuanLyNguoiDungRequestData request) {
         try {
-            String userId = request.id;           // ⭐ Dùng field id
-            String otpCode = request.otpCode;     // ⭐ Dùng field otpCode
+            String userId = request.id;
+            String otpCode = request.otpCode;
             
             // 1. Validate input
             if (userId == null || userId.trim().isEmpty()) {
@@ -38,11 +40,11 @@ public class VerifyOTPUseCase extends QuanLyNguoiDungControl {
                 return;
             }
             
-            // 2. Kiểm tra số lần nhập sai
+            // 2.  Kiểm tra số lần nhập sai
             int attempts = repository.getOTPAttempts(userId);
             if (attempts >= 5) {
                 response.success = false;
-                response.message = "Bạn đã nhập sai OTP quá 5 lần! Vui lòng đăng ký lại.";
+                response.message = "Bạn đã nhập sai OTP quá 5 lần!  Vui lòng đăng ký lại.";
                 response.remainingAttempts = 0;
                 return;
             }
@@ -54,8 +56,12 @@ public class VerifyOTPUseCase extends QuanLyNguoiDungControl {
                 // ✅ Xác thực thành công
                 repository.markEmailAsVerified(userId);
                 
+                // ✅ FIX:  Lấy thông tin user để hiển thị username
+                Optional<UserDTO> userOpt = repository.findById(userId);
+                String username = userOpt.map(u -> u.username).orElse("Người dùng");
+                
                 response.success = true;
-                response.message = "Xác thực email thành công!  Bạn có thể đăng nhập ngay bây giờ.";
+                response.message = "Xác thực email thành công! Chào mừng " + username + "!  Bạn có thể đăng nhập ngay bây giờ.";
                 response.userId = userId;
                 response.otpVerified = true;
                 
