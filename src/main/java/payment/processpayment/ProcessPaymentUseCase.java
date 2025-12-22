@@ -3,8 +3,8 @@ package payment.processpayment;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import repository.payment.*;
-import pay.entity.Order;
-import pay.entity.PaymentMethod;
+import entity.Order;
+import entity.PaymentMethod;
 import repository.payment.OrderPaymentRepository;
 
 import java.util.Optional;
